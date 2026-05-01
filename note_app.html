@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes → Argent</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07080f;
+    --surface: #10111c;
+    --card: #161724;
+    --border: rgba(255,255,255,0.07);
+    --accent: #d4f53c;
+    --red: #ff4d6d;
+    --blue: #4d9fff;
+    --text: #e4e4f0;
+    --muted: #50516e;
+    --radius: 18px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Mono',monospace; background:var(--bg); color:var(--text); min-height:100vh; }
+  body::after { content:''; position:fixed; width:700px; height:700px; background:radial-gradient(circle,rgba(212,245,60,0.055) 0%,transparent 65%); top:-250px; right:-200px; pointer-events:none; }
+
+  .wrap { max-width:980px; margin:0 auto; padding:36px 20px 80px; }
+
+  /* ── ÉCRAN PROFILS ── */
+  #profileScreen { animation:fadeUp .3s ease; }
+  .ps-title { font-family:'Syne',sans-serif; font-size:clamp(2rem,5vw,3rem); font-weight:800; letter-spacing:-2px; margin-bottom:4px; }
+  .ps-title em { font-style:normal; color:var(--accent); }
+  .ps-sub { color:var(--muted); font-size:11px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:36px; }
+
+  .profile-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin-bottom:24px; }
+
+  .profile-card {
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:20px; cursor:pointer; transition:border-color .2s,transform .2s;
+    animation:fadeUp .3s ease both; position:relative;
+  }
+  .profile-card:hover { border-color:rgba(255,255,255,0.15); transform:translateY(-2px); }
+
+  .pc-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:12px; }
+  .pc-name { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:4px; }
+  .pc-meta { font-size:11px; color:var(--muted); }
+  .pc-total { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; margin-top:10px; }
+  .pc-total.pos { color:var(--accent); }
+  .pc-total.neg { color:var(--red); }
+  .pc-total.zero { color:var(--muted); }
+
+  .pc-del { position:absolute; top:12px; right:12px; background:none; border:none; color:var(--muted); cursor:pointer; font-size:14px; transition:color .15s; padding:2px 5px; border-radius:6px; }
+  .pc-del:hover { color:var(--red); background:rgba(255,77,109,.1); }
+
+  .profile-add { background:transparent; border:1px dashed var(--border); border-radius:var(--radius); padding:20px; cursor:pointer; transition:border-color .2s,background .2s; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; min-height:140px; }
+  .profile-add:hover { border-color:rgba(212,245,60,0.3); background:rgba(212,245,60,0.03); }
+  .profile-add-icon { font-size:28px; color:var(--muted); }
+  .profile-add-label { font-size:12px; color:var(--muted); font-family:'Syne',sans-serif; font-weight:700; letter-spacing:.05em; }
+
+  /* Modal */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200; display:flex; align-items:center; justify-content:center; animation:fadeIn .2s ease; }
+  .modal-overlay.hidden { display:none !important; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .modal { background:var(--card); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding:28px; width:100%; max-width:400px; margin:20px; animation:slideUp .25s ease; }
+  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  .modal-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; margin-bottom:20px; }
+  .modal label { display:block; font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; margin-top:14px; }
+  .modal input[type=text] { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px; outline:none; transition:border-color .2s; }
+  .modal input[type=text]:focus { border-color:rgba(212,245,60,0.4); }
+
+  .avatar-picker { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+  .av-btn { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; border:2px solid transparent; transition:border-color .15s,transform .15s; background:var(--surface); }
+  .av-btn:hover { transform:scale(1.1); }
+  .av-btn.sel { border-color:var(--accent); }
+
+  .color-picker { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .col-btn { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:transform .15s,border-color .15s; }
+  .col-btn:hover { transform:scale(1.15); }
+  .col-btn.sel { border-color:white; transform:scale(1.15); }
+
+  .modal-actions { display:flex; gap:10px; margin-top:22px; }
+  .btn-prim { flex:1; background:var(--accent); color:#07080f; border:none; border-radius:10px; padding:11px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .15s,transform .15s; }
+  .btn-prim:hover { opacity:.88; transform:scale(.97); }
+  .btn-sec { background:none; border:1px solid var(--border); border-radius:10px; padding:11px 18px; color:var(--muted); font-family:'DM Mono',monospace; font-size:13px; cursor:pointer; transition:border-color .2s,color .2s; }
+  .btn-sec:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+
+  /* ── APP SCREEN ── */
+  #appScreen { display:none; animation:fadeUp .3s ease; }
+  #appScreen.visible { display:block; }
+
+  header { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:20px; margin-bottom:28px; }
+  .brand-wrap { display:flex; align-items:center; gap:14px; }
+  .back-btn { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:8px 14px; color:var(--muted); font-family:'DM Mono',monospace; font-size:12px; cursor:pointer; transition:border-color .2s,color .2s; white-space:nowrap; }
+  .back-btn:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+  .brand h1 { font-family:'Syne',sans-serif; font-size:clamp(1.6rem,4vw,2.6rem); font-weight:800; letter-spacing:-2px; line-height:1; }
+  .brand h1 em { font-style:normal; color:var(--accent); }
+  .brand p { margin-top:6px; font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
+
+  .total-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 22px; min-width:170px; text-align:right; position:relative; overflow:hidden; transition:border-color .4s; }
+  .total-card .glow { position:absolute; inset:0; border-radius:var(--radius); transition:opacity .5s; opacity:0; pointer-events:none; }
+  .total-card.pos .glow { background:radial-gradient(circle at 80% 50%,rgba(212,245,60,0.12),transparent 70%); opacity:1; }
+  .total-card.neg .glow { background:radial-gradient(circle at 80% 50%,rgba(255,77,109,0.12),transparent 70%); opacity:1; }
+  .total-label { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; position:relative; }
+  .total-val { font-family:'Syne',sans-serif; font-size:clamp(1.7rem,4vw,2.4rem); font-weight:800; letter-spacing:-1.5px; transition:color .4s; position:relative; }
+  .total-val.pos { color:var(--accent); }
+  .total-val.neg { color:var(--red); }
+  .total-val.zero { color:var(--muted); }
+  .total-sub { font-size:10px; color:var(--muted); position:relative; margin-top:2px; }
+
+  .tabs-wrap { display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; align-items:center; }
+  .tab-btn { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; padding:8px 18px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s; }
+  .tab-btn:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+  .tab-btn.active { background:var(--accent); color:#07080f; border-color:var(--accent); }
+  .tab-btn.recap-btn { margin-left:auto; background:none; border-color:rgba(212,245,60,0.2); color:var(--accent); }
+  .tab-btn.recap-btn:hover, .tab-btn.recap-btn.active { background:rgba(212,245,60,0.1); border-color:var(--accent); }
+
+  .legend { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin-bottom:24px; display:flex; flex-wrap:wrap; gap:5px 16px; align-items:center; }
+  .legend-title { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); width:100%; }
+  .leg { font-size:11px; color:var(--muted); display:flex; align-items:center; gap:5px; }
+  .leg b { color:var(--text); }
+  .pip { width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; }
+  .pip.g { background:var(--accent); }
+  .pip.r { background:var(--red); }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px; transition:border-color .2s,transform .2s; animation:fadeUp .35s ease both; }
+  .card:hover { border-color:rgba(255,255,255,0.13); transform:translateY(-2px); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  .card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .card-name { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; }
+  .card-sub { font-size:11px; padding:3px 9px; border-radius:20px; background:var(--surface); }
+  .card-sub.pos { color:var(--accent); }
+  .card-sub.neg { color:var(--red); }
+  .card-sub.zero { color:var(--muted); }
+
+  .row { display:flex; gap:7px; margin-bottom:12px; }
+  .row input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:8px 12px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px; outline:none; transition:border-color .2s; -moz-appearance:textfield; }
+  .row input::-webkit-inner-spin-button,.row input::-webkit-outer-spin-button { -webkit-appearance:none; }
+  .row input:focus { border-color:rgba(212,245,60,0.4); }
+  .row input.err { border-color:rgba(255,77,109,.5); animation:shake .3s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+  .btn-add { background:var(--accent); color:#07080f; border:none; border-radius:10px; padding:8px 14px; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; cursor:pointer; transition:opacity .15s,transform .15s; white-space:nowrap; }
+  .btn-add:hover { opacity:.88; transform:scale(.97); }
+
+  .notes-list { display:flex; flex-wrap:wrap; gap:5px; min-height:20px; }
+  .note-chip { font-size:11px; padding:3px 9px; border-radius:20px; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; gap:5px; animation:pop .2s ease; }
+  @keyframes pop { from{transform:scale(.7);opacity:0} to{transform:scale(1);opacity:1} }
+  .note-chip.pos { color:var(--accent); border-color:rgba(212,245,60,0.2); }
+  .note-chip.neg { color:var(--red); border-color:rgba(255,77,109,0.2); }
+  .note-chip button { background:none; border:none; color:var(--muted); cursor:pointer; font-size:11px; line-height:1; padding:0; transition:color .15s; }
+  .note-chip button:hover { color:var(--red); }
+  .empty-msg { font-size:11px; color:var(--muted); font-style:italic; }
+
+  /* RÉCAP */
+  #recapView { animation:fadeUp .3s ease both; }
+  .recap-header { font-family:'Syne',sans-serif; font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:18px; }
+  .recap-trim { margin-bottom:24px; }
+  .recap-trim-title { font-family:'Syne',sans-serif; font-size:15px; font-weight:800; letter-spacing:-.5px; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+  .recap-trim-badge { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:700; }
+  .recap-trim-badge.pos { background:rgba(212,245,60,0.12); color:var(--accent); }
+  .recap-trim-badge.neg { background:rgba(255,77,109,0.12); color:var(--red); }
+  .recap-trim-badge.zero { background:var(--surface); color:var(--muted); }
+  .recap-table { background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .recap-row { display:grid; grid-template-columns:1fr auto auto; gap:12px; padding:10px 16px; border-bottom:1px solid var(--border); align-items:center; transition:background .15s; cursor:pointer; }
+  .recap-row:last-child { border-bottom:none; }
+  .recap-row:hover { background:rgba(255,255,255,0.025); }
+  .recap-row-name { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; }
+  .recap-row-notes { display:flex; flex-wrap:wrap; gap:4px; justify-content:flex-end; }
+  .recap-chip { font-size:10px; padding:2px 7px; border-radius:20px; background:var(--surface); }
+  .recap-chip.pos { color:var(--accent); }
+  .recap-chip.neg { color:var(--red); }
+  .recap-row-total { font-family:'Syne',sans-serif; font-size:13px; font-weight:800; white-space:nowrap; text-align:right; min-width:65px; }
+  .recap-row-total.pos { color:var(--accent); }
+  .recap-row-total.neg { color:var(--red); }
+  .recap-row-total.zero { color:var(--muted); }
+  .recap-row-empty { color:var(--muted); font-size:11px; font-style:italic; grid-column:1/-1; }
+  .recap-detail-rows { background:var(--surface); border-bottom:1px solid var(--border); }
+  .recap-detail-row { display:grid; grid-template-columns:1fr auto auto; gap:12px; padding:7px 28px; align-items:center; font-size:11px; color:var(--muted); border-bottom:1px solid rgba(255,255,255,0.03); }
+  .recap-detail-row:last-child { border-bottom:none; }
+  .recap-detail-row .d-note { color:var(--text); }
+  .recap-detail-row .d-gain { text-align:right; white-space:nowrap; }
+  .recap-detail-row .d-gain.pos { color:var(--accent); }
+  .recap-detail-row .d-gain.neg { color:var(--red); }
+  .recap-global { background:var(--card); border:1px solid rgba(212,245,60,0.15); border-radius:16px; padding:18px 20px; margin-top:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+  .recap-global-label { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+  .recap-global-trims { display:flex; gap:20px; flex-wrap:wrap; }
+  .recap-global-trim { text-align:center; }
+  .gt-label { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:2px; }
+  .gt-val { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; letter-spacing:-.5px; }
+  .gt-val.pos { color:var(--accent); }
+  .gt-val.neg { color:var(--red); }
+  .gt-val.zero { color:var(--muted); }
+  .recap-global-total .gt-val { font-size:clamp(1.7rem,4vw,2.2rem); }
+
+  .footer { margin-top:30px; display:flex; gap:10px; flex-wrap:wrap; }
+  .btn-reset { background:none; border:1px solid var(--border); border-radius:10px; color:var(--muted); font-family:'DM Mono',monospace; font-size:12px; padding:8px 16px; cursor:pointer; transition:border-color .2s,color .2s; }
+  .btn-reset:hover { border-color:var(--red); color:var(--red); }
+
+  .coef-badge { padding:3px 8px; border-radius:20px; font-size:11px; }
+  .coef2  { background:rgba(212,245,60,0.12); color:var(--accent); border:1px solid rgba(212,245,60,0.25); }
+  .coef1  { background:rgba(77,159,255,0.10); color:var(--blue);   border:1px solid rgba(77,159,255,0.2); }
+  .coef05 { background:rgba(80,81,110,0.25);  color:var(--muted);  border:1px solid var(--border); }
+
+  .card-coef { font-size:10px; padding:2px 7px; border-radius:20px; margin-left:6px; }
+  .card-coef.c2  { background:rgba(212,245,60,0.12); color:var(--accent); }
+  .card-coef.c1  { background:rgba(77,159,255,0.10); color:var(--blue); }
+  .card-coef.c05 { background:rgba(80,81,110,0.25);  color:var(--muted); }
+
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(60px); background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 20px; font-size:13px; color:var(--text); transition:transform .3s ease,opacity .3s; opacity:0; z-index:1000; white-space:nowrap; }
+  .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ÉCRAN PROFILS -->
+  <div id="profileScreen">
+    <div class="ps-title">Notes <em>→</em> Argent</div>
+    <div class="ps-sub">Sélectionne ou crée un profil</div>
+    <div class="profile-grid" id="profileGrid"></div>
+    <div style="text-align:center;margin-top:8px;">
+      <button class="btn-reset" onclick="resetAllProfiles()">🗑 Tout réinitialiser</button>
+    </div>
+  </div>
+
+  <!-- APP PRINCIPALE -->
+  <div id="appScreen">
+    <header>
+      <div class="brand-wrap">
+        <button class="back-btn" onclick="goProfiles()">← Profils</button>
+        <div class="brand">
+          <h1 id="appTitle">Notes <em>→</em> Argent</h1>
+          <p id="appSub"></p>
+        </div>
+      </div>
+      <div class="total-card" id="totalCard">
+        <div class="glow"></div>
+        <div class="total-label">Total annuel</div>
+        <div class="total-val zero" id="totalVal">0,00 €</div>
+        <div class="total-sub" id="totalSub"></div>
+      </div>
+    </header>
+
+    <div class="tabs-wrap">
+      <button class="tab-btn active" onclick="setTab('t1')" id="tab-t1">T1 — 1er trimestre</button>
+      <button class="tab-btn" onclick="setTab('t2')" id="tab-t2">T2 — 2e trimestre</button>
+      <button class="tab-btn" onclick="setTab('t3')" id="tab-t3">T3 — 3e trimestre</button>
+      <button class="tab-btn recap-btn" onclick="setTab('recap')" id="tab-recap">📊 Récap annuel</button>
+    </div>
+
+    <div class="legend" id="legendeEl">
+      <div class="legend-title">Barème des récompenses</div>
+      <span class="leg"><span class="pip g"></span> 19–20 : <b>+2,00 €</b></span>
+      <span class="leg"><span class="pip g"></span> 17–18 : <b>+1,50 €</b></span>
+      <span class="leg"><span class="pip g"></span> 15–16 : <b>+1,00 €</b></span>
+      <span class="leg"><span class="pip g"></span> 13–14 : <b>+0,75 €</b></span>
+      <span class="leg"><span class="pip g"></span> 10–12 : <b>+0,50 €</b></span>
+      <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,50 €</b></span>
+      <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,75 €</b></span>
+      <span class="leg"><span class="pip r"></span> 4–5 : <b>−1,00 €</b></span>
+      <span class="leg"><span class="pip r"></span> 2–3 : <b>−1,50 €</b></span>
+      <span class="leg"><span class="pip r"></span> 0–1 : <b>−2,00 €</b></span>
+      <span class="leg"><span class="pip g"></span> Bonus progression : <b>+0,20 € / point gagné</b></span>
+      <div style="width:100%;height:1px;background:var(--border);margin:4px 0"></div>
+      <div class="legend-title">Coefficients par matière</div>
+      <span class="leg coef-badge coef2">📖 Français ×2</span>
+      <span class="leg coef-badge coef2">🧮 Maths ×2</span>
+      <span class="leg coef-badge coef2">🌍 Histoire-Géo ×2</span>
+      <span class="leg coef-badge coef1">🇬🇧 Anglais ×1</span>
+      <span class="leg coef-badge coef1">🇨🇳 Chinois ×1</span>
+      <span class="leg coef-badge coef1">🌱 SVT ×1</span>
+      <span class="leg coef-badge coef1">⚗️ Physique-Chimie ×1</span>
+      <span class="leg coef-badge coef05">💻 Technologie ×0,75</span>
+      <span class="leg coef-badge coef05">🎵 Musique ×0,75</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+    <div id="recapView" class="hidden"></div>
+
+    <div class="footer">
+      <button class="btn-reset" onclick="resetCurrentProfile()">🗑 Réinitialiser mes notes</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL CRÉATION PROFIL -->
+<div class="modal-overlay hidden" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-title">Nouveau profil</div>
+    <label>Prénom</label>
+    <input type="text" id="modalName" placeholder="Ex: Lucas" maxlength="20"
+      onkeydown="if(event.key==='Enter') createProfile()">
+    <label>Emoji / Avatar</label>
+    <div class="avatar-picker" id="avatarPicker"></div>
+    <label>Couleur</label>
+    <div class="color-picker" id="colorPicker"></div>
+    <div class="modal-actions">
+      <button class="btn-sec" onclick="closeModal()">Annuler</button>
+      <button class="btn-prim" onclick="createProfile()">Créer le profil</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// coef : multiplicateur appliqué aux gains/malus
+// principale ×2 | standard ×1 | mineure ×0.5
+const MATIERES = [
+  { id:"fr",   label:"📖 Français",        coef:2,   rang:"principale" },
+  { id:"ma",   label:"🧮 Maths",            coef:2,   rang:"principale" },
+  { id:"hg",   label:"🌍 Histoire-Géo",    coef:2,   rang:"principale" },
+  { id:"en",   label:"🇬🇧 Anglais",         coef:1,   rang:"standard"   },
+  { id:"zh",   label:"🇨🇳 Chinois",         coef:1,   rang:"standard"   },
+  { id:"svt",  label:"🌱 SVT",              coef:1,   rang:"standard"   },
+  { id:"pc",   label:"⚗️ Physique-Chimie", coef:1,   rang:"standard"   },
+  { id:"tech", label:"💻 Technologie",      coef:0.75, rang:"mineure"    },
+  { id:"mu",   label:"🎵 Musique",          coef:0.75, rang:"mineure"    },
+];
+const TRIMS = ["t1","t2","t3"];
+const TRIM_LABELS = { t1:"1er Trimestre", t2:"2e Trimestre", t3:"3e Trimestre" };
+const AVATARS = ["🎓","⭐","🦁","🐬","🦊","🐼","🎯","🚀","🎮","🌟","🦋","🐺"];
+const COLORS = ["#d4f53c","#4d9fff","#ff4d6d","#a78bfa","#fb923c","#34d399","#f472b6","#facc15","#60a5fa","#f87171","#4ade80","#c084fc"];
+
+const STORAGE_KEY = "notesApp_v2";
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let appData = { profiles: [] };
+let currentProfile = null;
+let currentTab = "t1";
+let selectedAvatar = AVATARS[0];
+let selectedColor = COLORS[0];
+
+// ── PERSISTANCE localStorage ─────────────────────────────────────────────────
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) appData = JSON.parse(raw);
+  } catch(e) { appData = { profiles: [] }; }
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+  } catch(e) {
+    showToast("⚠️ Impossible de sauvegarder (stockage plein ?)");
+  }
+}
+
+// ── CALCUL ───────────────────────────────────────────────────────────────────
+function valeurNote(n) {
+  if (n >= 19) return  2.00;
+  if (n >= 17) return  1.50;
+  if (n >= 15) return  1.00;
+  if (n >= 13) return  0.75;
+  if (n >= 10) return  0.50;
+  if (n >=  8) return -0.50;
+  if (n >=  6) return -0.75;
+  if (n >=  4) return -1.00;
+  if (n >=  2) return -1.50;
+  return               -2.00;
+}
+
+function detailMatiere(notes, coef) {
+  coef = coef || 1;
+  return notes.map((n, i) => {
+    const gain = valeurNote(n) * coef;
+    const bonus = (i > 0 && notes[i] > notes[i-1]) ? (notes[i] - notes[i-1]) * 0.2 * coef : 0;
+    return { note:n, gain, bonus };
+  });
+}
+
+function totalMatiere(notes, coef) {
+  return detailMatiere(notes, coef).reduce((s,d) => s + d.gain + d.bonus, 0);
+}
+
+function totalTrimestre(pd, trim) {
+  return MATIERES.reduce((acc,m) => acc + totalMatiere(((pd||{})[trim]||{})[m.id]||[], m.coef), 0);
+}
+
+function totalGlobal(pd) {
+  return TRIMS.reduce((acc,t) => acc + totalTrimestre(pd,t), 0);
+}
+
+// ── PROFIL HELPERS ───────────────────────────────────────────────────────────
+function getProfileNotes() {
+  return (appData.profiles[currentProfile] || {}).notes || {};
+}
+
+function setProfileNotes(notes) {
+  if (appData.profiles[currentProfile]) {
+    appData.profiles[currentProfile].notes = notes;
+    saveData();
+  }
+}
+
+// ── PROFILS SCREEN ───────────────────────────────────────────────────────────
+function renderProfiles() {
+  const grid = document.getElementById("profileGrid");
+  grid.innerHTML = "";
+
+  appData.profiles.forEach((p, idx) => {
+    const total = totalGlobal(p.notes || {});
+    const totalFmt = (total >= 0 ? "+" : "") + total.toFixed(2) + " €";
+    const totalCls = total > 0 ? "pos" : total < 0 ? "neg" : "zero";
+    const noteCount = TRIMS.reduce((acc,t) =>
+      acc + MATIERES.reduce((a,m) => a + ((p.notes?.[t]?.[m.id]||[]).length), 0), 0);
+
+    const card = document.createElement("div");
+    card.className = "profile-card";
+    card.style.animationDelay = (idx * 50) + "ms";
+    card.innerHTML = `
+      <button class="pc-del" title="Supprimer">✕</button>
+      <div class="pc-avatar" style="background:${p.color}22;color:${p.color}">${p.avatar}</div>
+      <div class="pc-name">${escHtml(p.name)}</div>
+      <div class="pc-meta">${noteCount} note${noteCount > 1 ? "s" : ""} saisie${noteCount > 1 ? "s" : ""}</div>
+      <div class="pc-total ${totalCls}">${noteCount > 0 ? totalFmt : "—"}</div>
+    `;
+    card.querySelector(".pc-del").addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteProfile(idx);
+    });
+    card.addEventListener("click", () => openProfile(idx));
+    grid.appendChild(card);
+  });
+
+  // Bouton ajouter un profil
+  const addCard = document.createElement("div");
+  addCard.className = "profile-add";
+  addCard.innerHTML = `<div class="profile-add-icon">+</div><div class="profile-add-label">Nouveau profil</div>`;
+  addCard.addEventListener("click", openModal);
+  grid.appendChild(addCard);
+}
+
+function openProfile(idx) {
+  currentProfile = idx;
+  const p = appData.profiles[idx];
+  document.getElementById("appTitle").innerHTML =
+    `${p.avatar} <em style="color:${p.color};font-style:normal">${escHtml(p.name)}</em>`;
+  document.getElementById("appSub").textContent = "notes se transforment en récompenses 💸";
+  document.getElementById("profileScreen").style.display = "none";
+  document.getElementById("appScreen").classList.add("visible");
+  currentTab = "t1";
+  setTab("t1");
+}
+
+function goProfiles() {
+  document.getElementById("appScreen").classList.remove("visible");
+  document.getElementById("profileScreen").style.display = "";
+  currentProfile = null;
+  renderProfiles();
+}
+
+function deleteProfile(idx) {
+  if (!confirm("Supprimer ce profil et toutes ses notes ?")) return;
+  appData.profiles.splice(idx, 1);
+  saveData();
+  showToast("🗑 Profil supprimé");
+  renderProfiles();
+}
+
+function resetAllProfiles() {
+  if (!confirm("Vraiment tout effacer ? Tous les profils et notes seront perdus.")) return;
+  appData = { profiles: [] };
+  saveData();
+  showToast("🔄 Tout réinitialisé");
+  renderProfiles();
+}
+
+// ── MODAL ────────────────────────────────────────────────────────────────────
+function buildModal() {
+  const ap = document.getElementById("avatarPicker");
+  ap.innerHTML = "";
+  AVATARS.forEach(av => {
+    const b = document.createElement("button");
+    b.className = "av-btn" + (av === selectedAvatar ? " sel" : "");
+    b.textContent = av;
+    b.onclick = () => { selectedAvatar = av; buildModal(); };
+    ap.appendChild(b);
+  });
+  const cp = document.getElementById("colorPicker");
+  cp.innerHTML = "";
+  COLORS.forEach(c => {
+    const b = document.createElement("button");
+    b.className = "col-btn" + (c === selectedColor ? " sel" : "");
+    b.style.background = c;
+    b.onclick = () => { selectedColor = c; buildModal(); };
+    cp.appendChild(b);
+  });
+}
+
+function openModal() {
+  selectedAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+  selectedColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+  document.getElementById("modalName").value = "";
+  buildModal();
+  document.getElementById("modalOverlay").classList.remove("hidden");
+  setTimeout(() => document.getElementById("modalName").focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").classList.add("hidden");
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById("modalOverlay")) closeModal();
+}
+
+function createProfile() {
+  const name = document.getElementById("modalName").value.trim();
+  if (!name) {
+    document.getElementById("modalName").focus();
+    showToast("❌ Saisis un prénom !");
+    return;
+  }
+  appData.profiles.push({ name, avatar: selectedAvatar, color: selectedColor, notes: {} });
+  saveData();
+  closeModal();
+  showToast("✅ Profil créé !");
+  renderProfiles();
+}
+
+// ── ONGLETS ──────────────────────────────────────────────────────────────────
+function setTab(tab) {
+  currentTab = tab;
+  TRIMS.forEach(t => document.getElementById("tab-" + t).classList.remove("active"));
+  document.getElementById("tab-recap").classList.remove("active");
+  if (tab === "recap") document.getElementById("tab-recap").classList.add("active");
+  else document.getElementById("tab-" + tab).classList.add("active");
+  afficher();
+}
+
+// ── GRILLE ───────────────────────────────────────────────────────────────────
+function afficherGrille() {
+  const notesData = getProfileNotes();
+  document.getElementById("legendeEl").classList.remove("hidden");
+  document.getElementById("grid").classList.remove("hidden");
+  document.getElementById("recapView").classList.add("hidden");
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  const trimData = notesData[currentTab] || {};
+
+  MATIERES.forEach((m, idx) => {
+    const notes = trimData[m.id] || [];
+    const sub = totalMatiere(notes, m.coef);
+    const subFmt = (sub >= 0 ? "+" : "") + sub.toFixed(2) + " €";
+    const subCls = sub > 0 ? "pos" : sub < 0 ? "neg" : "zero";
+    const coefCls = m.coef === 2 ? "c2" : m.coef === 0.75 ? "c05" : "c1";
+    const coefLabel = m.coef === 2 ? "×2" : m.coef === 0.75 ? "×0,75" : "×1";
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.animationDelay = (idx * 40) + "ms";
+
+    const chips = notes.length === 0
+      ? `<span class="empty-msg">Aucune note</span>`
+      : notes.map((n, i) => {
+          const cls = n >= 10 ? "pos" : "neg";
+          return `<span class="note-chip ${cls}">${n}/20
+            <button class="del-note" data-mid="${m.id}" data-i="${i}" title="Supprimer">×</button>
+          </span>`;
+        }).join("");
+
+    card.innerHTML = `
+      <div class="card-head">
+        <span class="card-name">${m.label}<span class="card-coef ${coefCls}">${coefLabel}</span></span>
+        <span class="card-sub ${subCls}">${notes.length > 0 ? subFmt : "—"}</span>
+      </div>
+      <div class="row">
+        <input id="input_${m.id}" type="number" min="0" max="20" step="0.5" placeholder="Note /20">
+        <button class="btn-add" data-mid="${m.id}">+ Ajouter</button>
+      </div>
+      <div class="notes-list">${chips}</div>
+    `;
+
+    // Événements
+    card.querySelector(".btn-add").addEventListener("click", () => ajouterNote(m.id));
+    card.querySelector(`#input_${m.id}`).addEventListener("keydown", e => {
+      if (e.key === "Enter") ajouterNote(m.id);
+    });
+    card.querySelectorAll(".del-note").forEach(btn => {
+      btn.addEventListener("click", () => supprimerNote(btn.dataset.mid, parseInt(btn.dataset.i)));
+    });
+
+    grid.appendChild(card);
+  });
+
+  updateTotalCard(notesData);
+}
+
+function ajouterNote(mId) {
+  const input = document.getElementById("input_" + mId);
+  const raw = parseFloat(input.value);
+  if (isNaN(raw) || raw < 0 || raw > 20) {
+    input.classList.add("err");
+    setTimeout(() => input.classList.remove("err"), 400);
+    showToast("❌ Note invalide (entre 0 et 20)");
+    return;
+  }
+  const note = Math.round(raw * 10) / 10;
+  const notes = getProfileNotes();
+  if (!notes[currentTab]) notes[currentTab] = {};
+  if (!notes[currentTab][mId]) notes[currentTab][mId] = [];
+  notes[currentTab][mId].push(note);
+  setProfileNotes(notes);
+  input.value = "";
+  input.focus();
+  afficher();
+  showToast("✅ Note ajoutée !");
+}
+
+function supprimerNote(mId, index) {
+  const notes = getProfileNotes();
+  if (!notes[currentTab] || !notes[currentTab][mId]) return;
+  notes[currentTab][mId].splice(index, 1);
+  setProfileNotes(notes);
+  afficher();
+  showToast("🗑 Note supprimée");
+}
+
+function resetCurrentProfile() {
+  if (!confirm("Effacer toutes les notes de ce profil ?")) return;
+  setProfileNotes({});
+  afficher();
+  showToast("🔄 Notes réinitialisées");
+}
+
+// ── RÉCAP ────────────────────────────────────────────────────────────────────
+function afficherRecap() {
+  const notesData = getProfileNotes();
+  document.getElementById("legendeEl").classList.add("hidden");
+  document.getElementById("grid").classList.add("hidden");
+  const rv = document.getElementById("recapView");
+  rv.classList.remove("hidden");
+
+  let html = `<div class="recap-header">📊 Récapitulatif annuel</div>`;
+
+  TRIMS.forEach(trim => {
+    const trimData = notesData[trim] || {};
+    const trimTotal = totalTrimestre(notesData, trim);
+    const trimCls = trimTotal > 0 ? "pos" : trimTotal < 0 ? "neg" : "zero";
+    const trimSign = trimTotal >= 0 ? "+" : "";
+
+    html += `<div class="recap-trim">
+      <div class="recap-trim-title">${TRIM_LABELS[trim]}
+        <span class="recap-trim-badge ${trimCls}">${trimSign}${trimTotal.toFixed(2)} €</span>
+      </div>
+      <div class="recap-table">`;
+
+    MATIERES.forEach(m => {
+      const notes = trimData[m.id] || [];
+      const details = detailMatiere(notes, m.coef);
+      const total = details.reduce((s,d) => s + d.gain + d.bonus, 0);
+      const totalCls = total > 0 ? "pos" : total < 0 ? "neg" : "zero";
+      const totalSign = total >= 0 ? "+" : "";
+      const detailId = `detail_${trim}_${m.id}`;
+
+      if (notes.length === 0) {
+        html += `<div class="recap-row">
+          <span class="recap-row-name">${m.label}</span>
+          <span class="recap-row-empty">Aucune note</span>
+        </div>`;
+      } else {
+        const chipsHtml = notes.map(n =>
+          `<span class="recap-chip ${n >= 10 ? "pos" : "neg"}">${n}/20</span>`).join("");
+        html += `<div class="recap-row" onclick="toggleDetail('${detailId}')">
+          <span class="recap-row-name">${m.label}</span>
+          <span class="recap-row-notes">${chipsHtml}</span>
+          <span class="recap-row-total ${totalCls}">${totalSign}${total.toFixed(2)} €</span>
+        </div>
+        <div class="recap-detail-rows hidden" id="${detailId}">`;
+
+        details.forEach((d, i) => {
+          const rowTotal = d.gain + d.bonus;
+          const rowTotalCls = rowTotal > 0 ? "pos" : rowTotal < 0 ? "neg" : "zero";
+          const rowSign = rowTotal >= 0 ? "+" : "";
+          const bonusTxt = d.bonus > 0
+            ? `<span style="font-size:10px;color:rgba(212,245,60,0.6);text-align:right">+bonus ${d.bonus.toFixed(2)}€</span>`
+            : `<span></span>`;
+          html += `<div class="recap-detail-row">
+            <span class="d-note">Note ${i+1} : ${d.note}/20</span>
+            ${bonusTxt}
+            <span class="d-gain ${rowTotalCls}">${rowSign}${rowTotal.toFixed(2)} €</span>
+          </div>`;
+        });
+
+        html += `</div>`;
+      }
+    });
+
+    html += `</div></div>`;
+  });
+
+  const t1 = totalTrimestre(notesData, "t1");
+  const t2 = totalTrimestre(notesData, "t2");
+  const t3 = totalTrimestre(notesData, "t3");
+  const total = t1 + t2 + t3;
+  const totalCls = total > 0 ? "pos" : total < 0 ? "neg" : "zero";
+  const totalSign = total >= 0 ? "+" : "";
+  const fmtT = v => {
+    const c = v > 0 ? "pos" : v < 0 ? "neg" : "zero";
+    const s = v >= 0 ? "+" : "";
+    return `<div class="gt-val ${c}">${s}${v.toFixed(2)} €</div>`;
+  };
+
+  html += `<div class="recap-global">
+    <div><div class="recap-global-label">Bilan annuel</div></div>
+    <div class="recap-global-trims">
+      <div class="recap-global-trim"><div class="gt-label">T1</div>${fmtT(t1)}</div>
+      <div class="recap-global-trim"><div class="gt-label">T2</div>${fmtT(t2)}</div>
+      <div class="recap-global-trim"><div class="gt-label">T3</div>${fmtT(t3)}</div>
+    </div>
+    <div class="recap-global-total">
+      <div class="gt-label">Total annuel</div>
+      <div class="gt-val ${totalCls}">${totalSign}${total.toFixed(2)} €</div>
+    </div>
+  </div>`;
+
+  rv.innerHTML = html;
+  updateTotalCard(notesData);
+}
+
+function toggleDetail(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle("hidden");
+}
+
+function updateTotalCard(notesData) {
+  const total = totalGlobal(notesData);
+  const valEl = document.getElementById("totalVal");
+  const subEl = document.getElementById("totalSub");
+  const cardEl = document.getElementById("totalCard");
+  const sign = total >= 0 ? "+" : "";
+  const cls = total > 0 ? "pos" : total < 0 ? "neg" : "zero";
+  valEl.textContent = sign + total.toFixed(2).replace(".", ",") + " €";
+  valEl.className = "total-val " + cls;
+  cardEl.className = "total-card " + (total > 0 ? "pos" : total < 0 ? "neg" : "");
+  const parts = TRIMS.map(t => {
+    const v = totalTrimestre(notesData, t);
+    return v !== 0 ? `${t.toUpperCase()} ${v >= 0 ? "+" : ""}${v.toFixed(2)}€` : null;
+  }).filter(Boolean);
+  subEl.textContent = parts.join(" · ");
+}
+
+function afficher() {
+  if (currentTab === "recap") afficherRecap();
+  else afficherGrille();
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+loadData();
+renderProfiles();
+</script>
+</body>
+</html>
