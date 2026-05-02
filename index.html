@@ -409,26 +409,26 @@ service cloud.firestore {
         <span class="leg"><span class="pip g"></span> 15–16 : <b>+1,00 €</b></span>
         <span class="leg"><span class="pip g"></span> 13–14 : <b>+0,75 €</b></span>
         <span class="leg"><span class="pip g"></span> 10–12 : <b>+0,50 €</b></span>
-        <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,50 €</b></span>
-        <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,75 €</b></span>
-        <span class="leg"><span class="pip r"></span> 4–5 : <b>−1,00 €</b></span>
-        <span class="leg"><span class="pip r"></span> 2–3 : <b>−1,50 €</b></span>
-        <span class="leg"><span class="pip r"></span> 0–1 : <b>−2,00 €</b></span>
+        <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,25 €</b></span>
+        <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,50 €</b></span>
+        <span class="leg"><span class="pip r"></span> 4–5 : <b>−0,75 €</b></span>
+        <span class="leg"><span class="pip r"></span> 2–3 : <b>−1,00 €</b></span>
+        <span class="leg"><span class="pip r"></span> 0–1 : <b>−1,50 €</b></span>
         <span class="leg"><span class="pip g"></span> Bonus progression : <b>+0,20 € / point gagné</b></span>
         <div style="width:100%;height:1px;background:var(--border);margin:4px 0"></div>
         <div class="legend-title">Coefficients par matière</div>
-        <span class="leg coef-badge coef2">📖 Français ×2</span>
-        <span class="leg coef-badge coef2">🧮 Maths ×2</span>
-        <span class="leg coef-badge coef2">🌍 Histoire-Géo ×2</span>
+        <span class="leg coef-badge coef2">📖 Français ×1,5</span>
+        <span class="leg coef-badge coef2">🧮 Maths ×1,5</span>
+        <span class="leg coef-badge coef2">🌍 Histoire-Géo ×1,5</span>
         <span class="leg coef-badge coef1">🇬🇧 Anglais ×1</span>
         <span class="leg coef-badge coef1">🇨🇳 Chinois ×1</span>
         <span class="leg coef-badge coef1">🌱 SVT ×1</span>
         <span class="leg coef-badge coef1">⚗️ Physique-Chimie ×1</span>
-        <span class="leg coef-badge coef05">💻 Technologie ×0,75</span>
-        <span class="leg coef-badge coef05">🎵 Musique ×0,75</span>
-        <span class="leg coef-badge coef05">⚽ EPS ×0,75</span>
-        <span class="leg coef-badge coef05">🎨 Arts Plastiques ×0,75</span>
-        <span class="leg coef-badge coef05">🏫 Vie Scolaire ×0,75</span>
+        <span class="leg coef-badge coef05">💻 Technologie ×0,5</span>
+        <span class="leg coef-badge coef05">🎵 Musique ×0,5</span>
+        <span class="leg coef-badge coef05">⚽ EPS ×0,5</span>
+        <span class="leg coef-badge coef05">🎨 Arts Plastiques ×0,5</span>
+        <span class="leg coef-badge coef05">🏫 Vie Scolaire ×0,5</span>
       </div>
     </div>
 
@@ -491,22 +491,22 @@ if (CONFIGURED) {
 
 // ── CONSTANTES ───────────────────────────────────────────────────
 const MATIERES = [
-  { id:"fr",   label:"📖 Français",        coef:2,    rang:"principale" },
-  { id:"ma",   label:"🧮 Maths",            coef:2,    rang:"principale" },
-  { id:"hg",   label:"🌍 Histoire-Géo",    coef:2,    rang:"principale" },
+  { id:"fr",   label:"📖 Français",        coef:1.5,  rang:"principale" },
+  { id:"ma",   label:"🧮 Maths",            coef:1.5,  rang:"principale" },
+  { id:"hg",   label:"🌍 Histoire-Géo",    coef:1.5,  rang:"principale" },
   { id:"en",   label:"🇬🇧 Anglais",         coef:1,    rang:"standard"   },
   { id:"zh",   label:"🇨🇳 Chinois",         coef:1,    rang:"standard"   },
   { id:"svt",  label:"🌱 SVT",              coef:1,    rang:"standard"   },
   { id:"pc",   label:"⚗️ Physique-Chimie", coef:1,    rang:"standard"   },
-  { id:"tech", label:"💻 Technologie",      coef:0.75, rang:"mineure"    },
-  { id:"mu",   label:"🎵 Musique",          coef:0.75, rang:"mineure"    },
-  { id:"eps",  label:"⚽ EPS",              coef:0.75, rang:"mineure"    },
-  { id:"ap",   label:"🎨 Arts Plastiques",  coef:0.75, rang:"mineure"    },
-  { id:"vs",   label:"🏫 Vie Scolaire",     coef:0.75, rang:"mineure"    },
+  { id:"tech", label:"💻 Technologie",      coef:0.5,  rang:"mineure"    },
+  { id:"mu",   label:"🎵 Musique",          coef:0.5,  rang:"mineure"    },
+  { id:"eps",  label:"⚽ EPS",              coef:0.5,  rang:"mineure"    },
+  { id:"ap",   label:"🎨 Arts Plastiques",  coef:0.5,  rang:"mineure"    },
+  { id:"vs",   label:"🏫 Vie Scolaire",     coef:0.5,  rang:"mineure"    },
 ];
 const TRIMS       = ["t1","t2","t3"];
 const TRIM_LABELS = { t1:"1er Trimestre", t2:"2e Trimestre", t3:"3e Trimestre" };
-const AVATARS = ["🎓","⭐","🦁","🐬","🦊","🐼","🎯","🚀","🎮","🌟","🦋","🐺","🐸","🌈","🏆","😎"];
+const AVATARS = ["🎓","⭐","🦁","🐬","🦊","🐼","🎯","🚀","🎮","🌟","🐺","🐸","🏆","😎","😭","🙏","💔","🥀"];
 const COLORS  = ["#d4f53c","#4d9fff","#ff4d6d","#a78bfa","#fb923c","#34d399","#f472b6","#facc15","#60a5fa","#f87171","#4ade80","#c084fc"];
 
 // ── STATE ────────────────────────────────────────────────────────
@@ -652,11 +652,18 @@ if (CONFIGURED) {
 
 // ── CALCULS ──────────────────────────────────────────────────────
 function valeurNote(n) {
-  if (n>=19) return  2.00; if (n>=17) return  1.50;
-  if (n>=15) return  1.00; if (n>=13) return  0.75;
-  if (n>=10) return  0.50; if (n>= 8) return -0.50;
-  if (n>= 6) return -0.75; if (n>= 4) return -1.00;
-  if (n>= 2) return -1.50; return               -2.00;
+  // Gains (toujours > pertes pour encourager)
+  if (n>=19) return  2.00;
+  if (n>=17) return  1.50;
+  if (n>=15) return  1.00;
+  if (n>=13) return  0.75;
+  if (n>=10) return  0.50;
+  // Pertes (max -1.50€ à 0)
+  if (n>= 8) return -0.25;
+  if (n>= 6) return -0.50;
+  if (n>= 4) return -0.75;
+  if (n>= 2) return -1.00;
+  return               -1.50;
 }
 function detailMatiere(notes, coef) {
   coef = coef || 1;
@@ -800,8 +807,8 @@ function afficherGrille() {
     const sub     = totalMatiere(notes,m.coef);
     const subFmt  = (sub>=0?'+':'')+sub.toFixed(2)+' €';
     const subCls  = sub>0?'pos':sub<0?'neg':'zero';
-    const coefCls = m.coef===2?'c2':m.coef===0.75?'c05':'c1';
-    const coefLbl = m.coef===2?'×2':m.coef===0.75?'×0,75':'×1';
+    const coefCls = m.coef===1.5?'c2':m.coef===0.5?'c05':'c1';
+    const coefLbl = m.coef===1.5?'×1,5':m.coef===0.5?'×0,5':'×1';
 
     const chips = notes.length===0
       ? '<span class="empty-msg">Aucune note</span>'
