@@ -46,22 +46,14 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 #scannerScreen.visible{display:block;animation:fadeUp .3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── BARRE DU HAUT ── */
 .top-bar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;gap:12px;flex-wrap:wrap;}
 .top-bar-left{display:flex;flex-direction:column;gap:8px;}
 .scanner-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;letter-spacing:-2px;}
 .scanner-title em{font-style:normal;color:var(--accent);}
 .free-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(212,245,60,0.1);border:1px solid rgba(212,245,60,0.25);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--accent);letter-spacing:.1em;}
+.claude-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(77,159,255,0.1);border:1px solid rgba(77,159,255,0.25);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--blue);letter-spacing:.1em;}
 
-/* ── BOUTON RETOUR VERS APP ── */
-.back-to-app{
-  display:inline-flex;align-items:center;gap:7px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:8px 16px;
-  color:var(--muted);font-family:'DM Mono',monospace;
-  font-size:12px;cursor:pointer;text-decoration:none;
-  transition:border-color .2s,color .2s;white-space:nowrap;
-}
+.back-to-app{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s;white-space:nowrap;}
 .back-to-app:hover{border-color:rgba(255,255,255,0.15);color:var(--text);}
 
 .user-info{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
@@ -69,22 +61,17 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 .btn-logout{background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .2s;}
 .btn-logout:hover{border-color:var(--red);color:var(--red);}
 
-.setup-card{background:var(--card);border:1px solid rgba(212,245,60,0.2);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
-.setup-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:6px;}
-.setup-sub{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
-.setup-sub a{color:var(--accent);text-decoration:none;}
-.setup-sub strong{color:var(--text);}
-.api-row{display:flex;gap:8px;}
-.api-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;transition:border-color .2s;}
-.api-row input:focus{border-color:rgba(212,245,60,0.4);}
-.api-row button{background:var(--accent);color:#07080f;border:none;border-radius:10px;padding:10px 18px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.api-saved{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--accent);margin-top:8px;}
+/* CARTE INFO CLAUDE */
+.info-card{background:var(--card);border:1px solid rgba(77,159,255,0.2);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.info-icon{font-size:28px;flex-shrink:0;}
+.info-text{font-size:11px;color:var(--muted);line-height:1.7;}
+.info-text strong{color:var(--blue);}
 
 .main-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;}
 .section-label{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
 .section-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;}
 
-.profile-list{display:flex;flex-direction:column;gap:8px;margin-bottom:0;}
+.profile-list{display:flex;flex-direction:column;gap:8px;}
 .profile-option{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 14px;cursor:pointer;transition:all .2s;}
 .profile-option:hover{border-color:rgba(255,255,255,0.15);}
 .profile-option.selected{border-color:rgba(212,245,60,0.4);background:rgba(212,245,60,0.04);}
@@ -137,14 +124,7 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 .suc-icon{font-size:64px;margin-bottom:16px;}
 .suc-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:8px;}
 .suc-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:28px;}
-.btn-go-app{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--accent);color:#07080f;
-  border:none;border-radius:12px;padding:14px 28px;
-  font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
-  cursor:pointer;text-decoration:none;
-  transition:opacity .15s,transform .15s;margin-bottom:12px;
-}
+.btn-go-app{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#07080f;border:none;border-radius:12px;padding:14px 28px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .15s;margin-bottom:12px;}
 .btn-go-app:hover{opacity:.88;transform:scale(.97);}
 
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:13px;color:var(--text);transition:transform .3s,opacity .3s;opacity:0;z-index:1000;white-space:nowrap;}
@@ -153,7 +133,6 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 
 @media(max-width:500px){
   .wrap{padding:20px 14px 80px;}
-  .api-row{flex-direction:column;}
   .trim-grid{gap:6px;}
   .top-bar{flex-direction:column;}
   .user-info{align-items:flex-start;}
@@ -191,10 +170,12 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 
   <div class="top-bar">
     <div class="top-bar-left">
-      <!-- ══ BOUTON RETOUR ══ -->
       <a href="index.html" class="back-to-app">← Retour à l'app</a>
       <div class="scanner-title">Scanner <em>bulletin</em></div>
-      <div class="free-badge">✨ Gratuit pour toujours</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div class="free-badge">✨ Gratuit pour toujours</div>
+        <div class="claude-badge">🤖 Propulsé par Claude</div>
+      </div>
     </div>
     <div class="user-info">
       <div class="user-email" id="userEmail"></div>
@@ -202,20 +183,13 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
     </div>
   </div>
 
-  <!-- CLEF GEMINI -->
-  <div class="setup-card" id="apiSetupCard">
-    <div class="setup-title">🔑 Clef Google Gemini <span style="font-size:11px;color:var(--accent);font-family:'DM Mono'">(une seule fois)</span></div>
-    <div class="setup-sub">
-      1. Va sur <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
-      2. Clique <strong>"Create API key"</strong> → copie-la<br>
-      3. Colle-la ici 👇 — <strong>gratuit, 1500 scans/jour</strong>
+  <!-- INFO CLAUDE — plus besoin de clef ! -->
+  <div class="info-card">
+    <div class="info-icon">🤖</div>
+    <div class="info-text">
+      <strong>Analyse par Claude AI</strong> — Plus besoin de clef API !<br>
+      L'intelligence artificielle Claude lit ton bulletin et extrait les notes automatiquement.
     </div>
-    <div class="api-row">
-      <input type="password" id="apiKeyInput" placeholder="AIzaSy…" autocomplete="off"
-        onkeydown="if(event.key==='Enter')saveApiKey()">
-      <button onclick="saveApiKey()">Enregistrer</button>
-    </div>
-    <div class="api-saved hidden" id="apiSaved">✓ Clef enregistrée</div>
   </div>
 
   <!-- FORM PRINCIPAL -->
@@ -278,7 +252,6 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
     <div class="suc-icon">🎉</div>
     <div class="suc-title">Enregistré !</div>
     <div class="suc-sub" id="successSub"></div>
-    <!-- ══ BOUTON VOIR DANS L'APP ══ -->
     <a href="index.html" class="btn-go-app">📊 Voir dans l'app</a>
     <br>
     <button class="reset-btn" style="max-width:280px;margin:0 auto" onclick="resetAll()">📷 Scanner un autre bulletin</button>
@@ -325,7 +298,6 @@ let selectedProf   = null;
 let selectedTrim   = null;
 let selectedFile   = null;
 let extractedNotes = {};
-let apiKey = localStorage.getItem('gemini_key') || '';
 
 auth.onAuthStateChanged(async user => {
   document.getElementById('loadingScreen').classList.add('hidden');
@@ -336,10 +308,6 @@ auth.onAuthStateChanged(async user => {
     document.getElementById('scannerScreen').classList.add('visible');
     await loadData();
     renderProfiles();
-    if (apiKey) {
-      document.getElementById('apiKeyInput').value = apiKey;
-      document.getElementById('apiSaved').classList.remove('hidden');
-    }
     updateScanBtn();
   } else {
     currentUser = null;
@@ -394,7 +362,7 @@ function renderProfiles() {
   const list = document.getElementById('profileList');
   if (!appData.profiles.length) {
     list.innerHTML = `<div style="color:var(--muted);font-size:12px;font-style:italic">
-      Aucun profil — <a href="app.html" style="color:var(--accent);text-decoration:none">crée-en un dans l'app principale</a> d'abord.
+      Aucun profil — crée-en un dans l'app principale d'abord.
     </div>`;
     return;
   }
@@ -419,16 +387,6 @@ function selectTrim(t) {
   updateScanBtn();
 }
 
-function saveApiKey() {
-  const val = document.getElementById('apiKeyInput').value.trim();
-  if (!val.startsWith('AIza')) { showToast('❌ Clef invalide (doit commencer par AIza)'); return; }
-  apiKey = val;
-  localStorage.setItem('gemini_key', val);
-  document.getElementById('apiSaved').classList.remove('hidden');
-  updateScanBtn();
-  showToast('✅ Clef enregistrée !');
-}
-
 const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
@@ -447,7 +405,7 @@ function handleFile(file) {
 }
 
 function updateScanBtn() {
-  const ok = selectedProf !== null && selectedTrim !== null && selectedFile && apiKey;
+  const ok = selectedProf !== null && selectedTrim !== null && selectedFile;
   document.getElementById('scanBtn').disabled = !ok;
 }
 
@@ -461,11 +419,18 @@ async function startScan() {
 
   log('info', '📷 Lecture de l\'image…');
 
-  let base64;
-  try { base64 = await fileToBase64(selectedFile); }
-  catch(e) { log('err','❌ Erreur lecture fichier'); return; }
+  let base64, mimeType;
+  try {
+    mimeType = selectedFile.type || 'image/jpeg';
+    base64 = await fileToBase64(selectedFile);
+  } catch(e) {
+    log('err','❌ Erreur lecture fichier');
+    document.getElementById('miniSpinner').style.display = 'none';
+    document.getElementById('scanBtn').disabled = false;
+    return;
+  }
 
-  log('info', '🤖 Envoi à Google Gemini…');
+  log('info', '🤖 Envoi à Claude AI…');
 
   const prompt = `Tu es un assistant qui lit des bulletins scolaires français.
 Analyse cette image et extrait toutes les notes numériques pour chaque matière.
@@ -481,35 +446,46 @@ Réponds UNIQUEMENT en JSON valide, sans texte ni backticks :
 Règles : n'inclus que les matières visibles, n'invente aucune note, utilise des nombres entre 0 et 20.`;
 
   try {
-    const mimeType = selectedFile.type || 'image/jpeg';
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              { inline_data: { mime_type: mimeType, data: base64 } },
-              { text: prompt }
-            ]
-          }]
-        })
-      }
-    );
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: {
+                type: 'base64',
+                media_type: mimeType,
+                data: base64
+              }
+            },
+            {
+              type: 'text',
+              text: prompt
+            }
+          ]
+        }]
+      })
+    });
 
     if (!res.ok) {
       const err = await res.json();
-      log('err', '❌ ' + (err.error?.message || 'Erreur API '+res.status));
-      if (res.status === 400 && err.error?.message?.includes('API_KEY'))
-        log('err', '→ Vérifie ta clef API Gemini');
+      log('err', '❌ Erreur API : ' + (err.error?.message || 'statut '+res.status));
       document.getElementById('miniSpinner').style.display = 'none';
       document.getElementById('scanBtn').disabled = false;
       return;
     }
 
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const text = data.content?.[0]?.text || '';
     log('ok', '✅ Réponse reçue !');
 
     let parsed;
@@ -591,7 +567,6 @@ async function confirmSave() {
     await saveToFirestore();
     const tl = {t1:'1er trimestre',t2:'2e trimestre',t3:'3e trimestre'}[selectedTrim];
     document.getElementById('mainForm').style.display = 'none';
-    document.getElementById('apiSetupCard').style.display = 'none';
     const suc = document.getElementById('successBox');
     suc.classList.add('visible');
     document.getElementById('successSub').innerHTML =
@@ -608,14 +583,13 @@ function resetScan() {
   document.getElementById('progressBox').classList.add('hidden');
   document.getElementById('resultsBox').classList.add('hidden');
   document.getElementById('fileInput').value = '';
-  document.getElementById('scanBtn').disabled = true;
+  updateScanBtn();
 }
 
 function resetAll() {
   selectedProf = null; selectedTrim = null; resetScan();
   document.getElementById('successBox').classList.remove('visible');
   document.getElementById('mainForm').style.display = '';
-  document.getElementById('apiSetupCard').style.display = '';
   document.querySelectorAll('.profile-option').forEach(el=>el.classList.remove('selected'));
   document.querySelectorAll('.trim-btn').forEach(b=>b.classList.remove('selected'));
 }
