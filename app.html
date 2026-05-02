@@ -77,6 +77,25 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 .sync-dot.error{background:var(--red);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
+/* ── BOUTON SCANNER ── */
+.scanner-link-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(212,245,60,0.08);
+  border:1px solid rgba(212,245,60,0.3);
+  border-radius:12px;padding:10px 18px;
+  color:var(--accent);font-family:'Syne',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  text-decoration:none;
+  transition:background .2s,border-color .2s,transform .15s;
+  white-space:nowrap;
+}
+.scanner-link-btn:hover{
+  background:rgba(212,245,60,0.14);
+  border-color:rgba(212,245,60,0.55);
+  transform:translateY(-1px);
+}
+.scanner-link-btn .scan-icon{font-size:16px;}
+
 /* ── MODAL DÉCONNEXION ── */
 .logout-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:400;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease;}
 .logout-modal-overlay.hidden{display:none!important;}
@@ -299,6 +318,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
   .auth-box{padding:24px 20px;}
   .logout-modal{max-width:100%;margin:0;border-radius:22px 22px 0 0;padding:28px 20px max(28px,env(safe-area-inset-bottom,28px));}
   .logout-modal-overlay{align-items:flex-end;}
+  .scanner-link-btn{width:100%;justify-content:center;}
 }
 @media(max-width:380px){
   .profile-grid{grid-template-columns:1fr;}
@@ -314,7 +334,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
   <div class="loading-label">Connexion…</div>
 </div>
 
-<!-- SETUP SCREEN (Firebase non configuré) -->
+<!-- SETUP SCREEN -->
 <div id="setupScreen" class="hidden">
   <div class="setup-box">
     <div class="setup-title">⚙️ Configuration Firebase requise</div>
@@ -398,6 +418,13 @@ service cloud.firestore {
       </div>
       <div class="user-bar">
         <div class="auth-email-badge" id="userEmailBadge"></div>
+
+        <!-- ══ BOUTON SCANNER ══ -->
+        <a href="scanner.html" class="scanner-link-btn">
+          <span class="scan-icon">📷</span>
+          Scanner un bulletin
+        </a>
+
         <button class="auth-logout-btn" onclick="logout()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Déconnexion
@@ -500,9 +527,6 @@ service cloud.firestore {
 <div class="toast" id="toast"></div>
 
 <script>
-// ╔══════════════════════════════════════════╗
-// ║  ⚙️  COLLE_TA_CONFIG_ICI               ║
-// ╚══════════════════════════════════════════╝
 const firebaseConfig = {
   apiKey:            "AIzaSyByTPVLcCh95cCdG--3posbW6XdCblFOMI",
   authDomain:        "app-note-4550c.firebaseapp.com",
@@ -512,7 +536,6 @@ const firebaseConfig = {
   appId:             "1:299167926024:web:46841a484e27775ce50ebd",
   measurementId:     "G-7WVT1GG918"
 };
-// ════════════════════════════════════════════
 
 const CONFIGURED = firebaseConfig.apiKey !== "COLLE_TA_CONFIG_ICI";
 let auth, db;
@@ -527,7 +550,6 @@ if (CONFIGURED) {
   document.getElementById('setupScreen').classList.remove('hidden');
 }
 
-// ── CONSTANTES ───────────────────────────────────────────────────
 const MATIERES = [
   { id:"fr",   label:"📖 Français",        coef:1.5,  rang:"principale" },
   { id:"ma",   label:"🧮 Maths",            coef:1.5,  rang:"principale" },
@@ -547,7 +569,6 @@ const TRIM_LABELS = { t1:"1er Trimestre", t2:"2e Trimestre", t3:"3e Trimestre" }
 const AVATARS = ["🎓","⭐","🦁","🐬","🦊","🐼","🎯","🚀","🎮","🌟","🐺","🐸","🏆","😎","😭","🙏","💔","🥀"];
 const COLORS  = ["#d4f53c","#4d9fff","#ff4d6d","#a78bfa","#fb923c","#34d399","#f472b6","#facc15","#60a5fa","#f87171","#4ade80","#c084fc"];
 
-// ── STATE ────────────────────────────────────────────────────────
 let appData        = { profiles: [] };
 let currentUser    = null;
 let currentProfile = null;
@@ -556,7 +577,6 @@ let selectedAvatar = AVATARS[0];
 let selectedColor  = COLORS[0];
 let saveTimer      = null;
 
-// ── SYNC UI ──────────────────────────────────────────────────────
 function setSyncState(s) {
   const dot = document.getElementById('syncDot');
   const lbl = document.getElementById('syncLabel');
@@ -566,7 +586,6 @@ function setSyncState(s) {
   if (lbl) lbl.textContent = map[s] || '';
 }
 
-// ── FIRESTORE ────────────────────────────────────────────────────
 async function loadData() {
   if (!currentUser || !db) return;
   try {
@@ -598,9 +617,7 @@ function saveData() {
   }, 700);
 }
 
-// ── AUTH ─────────────────────────────────────────────────────────
 let authMode = 'login';
-
 function switchAuthTab(mode) {
   authMode = mode;
   ['login','register'].forEach(m => {
@@ -656,35 +673,20 @@ async function resetPassword() {
   } catch(e) { showAuthError(xlate(e.code)); }
 }
 
-// ── MODAL DÉCONNEXION ────────────────────────────────────────────
 function logout() {
   document.getElementById('logoutEmailDisplay').textContent = currentUser ? currentUser.email : '';
   document.getElementById('logoutModal').classList.remove('hidden');
 }
+function closeLogoutModal() { document.getElementById('logoutModal').classList.add('hidden'); }
+async function confirmLogout() { closeLogoutModal(); await auth.signOut(); showToast('👋 À bientôt !'); }
+document.getElementById('logoutModal').addEventListener('click', function(e) { if (e.target === this) closeLogoutModal(); });
 
-function closeLogoutModal() {
-  document.getElementById('logoutModal').classList.add('hidden');
-}
-
-async function confirmLogout() {
-  closeLogoutModal();
-  await auth.signOut();
-  showToast('👋 À bientôt !');
-}
-
-// Fermer en cliquant hors du modal
-document.getElementById('logoutModal').addEventListener('click', function(e) {
-  if (e.target === this) closeLogoutModal();
-});
-
-// ── ÉCRANS ───────────────────────────────────────────────────────
 function showScreen(name) {
   document.getElementById('authScreen').classList.toggle('hidden', name !== 'auth');
   document.getElementById('profileScreen').style.display = name === 'profiles' ? 'block' : 'none';
   document.getElementById('appScreen').style.display = name === 'app' ? 'block' : 'none';
 }
 
-// ── FIREBASE AUTH LISTENER ───────────────────────────────────────
 if (CONFIGURED) {
   auth.onAuthStateChanged(async user => {
     if (user) {
@@ -704,7 +706,6 @@ if (CONFIGURED) {
   });
 }
 
-// ── CALCULS ──────────────────────────────────────────────────────
 function valeurNote(n) {
   if (n>=19) return  2.00;
   if (n>=17) return  1.50;
@@ -735,7 +736,6 @@ function totalGlobal(pd) {
   return TRIMS.reduce((acc,t)=>acc+totalTrimestre(pd,t),0);
 }
 
-// ── PROFILS ──────────────────────────────────────────────────────
 function getProfileNotes() { return (appData.profiles[currentProfile]||{}).notes||{}; }
 function setProfileNotes(notes) {
   if (appData.profiles[currentProfile]) { appData.profiles[currentProfile].notes = notes; saveData(); }
@@ -794,7 +794,6 @@ function resetAllProfiles() {
   showToast('🔄 Réinitialisé'); renderProfiles();
 }
 
-// ── MODAL ────────────────────────────────────────────────────────
 function buildModal() {
   const ap = document.getElementById('avatarPicker');
   ap.innerHTML = '';
@@ -836,7 +835,6 @@ function createProfile() {
   showToast('✅ Profil créé !'); renderProfiles();
 }
 
-// ── ONGLETS ──────────────────────────────────────────────────────
 function setTab(tab) {
   currentTab = tab;
   [...TRIMS,'recap'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
@@ -844,7 +842,6 @@ function setTab(tab) {
   afficher();
 }
 
-// ── GRILLE ───────────────────────────────────────────────────────
 function afficherGrille() {
   const notesData = getProfileNotes();
   document.getElementById('legendeEl').classList.remove('hidden');
@@ -920,7 +917,6 @@ function resetCurrentProfile() {
   setProfileNotes({}); afficher(); showToast('🔄 Notes réinitialisées');
 }
 
-// ── RÉCAP ────────────────────────────────────────────────────────
 function afficherRecap() {
   const nd = getProfileNotes();
   document.getElementById('legendeEl').classList.add('hidden');
@@ -1014,7 +1010,6 @@ function afficher() { if(currentTab==='recap') afficherRecap(); else afficherGri
 function toggleLegend() { document.getElementById('legendeEl').classList.toggle('collapsed'); }
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ── TOAST ────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
   const t=document.getElementById('toast');
