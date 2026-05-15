@@ -78,22 +78,8 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* ── BOUTON SCANNER ── */
-.scanner-link-btn{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(212,245,60,0.08);
-  border:1px solid rgba(212,245,60,0.3);
-  border-radius:12px;padding:10px 18px;
-  color:var(--accent);font-family:'Syne',sans-serif;
-  font-size:13px;font-weight:700;cursor:pointer;
-  text-decoration:none;
-  transition:background .2s,border-color .2s,transform .15s;
-  white-space:nowrap;
-}
-.scanner-link-btn:hover{
-  background:rgba(212,245,60,0.14);
-  border-color:rgba(212,245,60,0.55);
-  transform:translateY(-1px);
-}
+.scanner-link-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(212,245,60,0.08);border:1px solid rgba(212,245,60,0.3);border-radius:12px;padding:10px 18px;color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s,transform .15s;white-space:nowrap;}
+.scanner-link-btn:hover{background:rgba(212,245,60,0.14);border-color:rgba(212,245,60,0.55);transform:translateY(-1px);}
 .scanner-link-btn .scan-icon{font-size:16px;}
 
 /* ── MODAL DÉCONNEXION ── */
@@ -110,6 +96,7 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 .btn-logout-cancel{flex:1;background:none;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;transition:border-color .2s,color .2s;}
 .btn-logout-cancel:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
 
+/* ── PROFIL CARDS ── */
 .profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:20px;}
 .profile-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:border-color .2s,transform .2s;animation:fadeUp .3s ease both;position:relative;}
 .profile-card:hover{border-color:rgba(255,255,255,0.15);transform:translateY(-2px);}
@@ -122,6 +109,10 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 .pc-total.zero{color:var(--muted);}
 .pc-del{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;transition:color .15s;padding:4px 6px;border-radius:6px;}
 .pc-del:hover{color:var(--red);background:rgba(255,77,109,.1);}
+/* Badge collège/lycée sur la carte profil */
+.pc-niveau{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:20px;margin-top:6px;font-weight:700;}
+.pc-niveau.college{background:rgba(77,159,255,0.12);color:var(--blue);border:1px solid rgba(77,159,255,0.25);}
+.pc-niveau.lycee{background:rgba(212,245,60,0.10);color:var(--accent);border:1px solid rgba(212,245,60,0.25);}
 .profile-add{background:transparent;border:1px dashed var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:border-color .2s,background .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:140px;}
 .profile-add:hover{border-color:rgba(212,245,60,0.3);background:rgba(212,245,60,0.03);}
 .profile-add-icon{font-size:28px;color:var(--muted);}
@@ -145,6 +136,14 @@ body::after{content:'';position:fixed;width:700px;height:700px;background:radial
 .col-btn{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;}
 .col-btn:hover{transform:scale(1.15);}
 .col-btn.sel{border-color:white;transform:scale(1.15);}
+
+/* Sélecteur collège / lycée */
+.niveau-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.niveau-btn{padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;}
+.niveau-btn:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.niveau-btn.sel-college{border-color:rgba(77,159,255,0.6);background:rgba(77,159,255,0.1);color:var(--blue);}
+.niveau-btn.sel-lycee{border-color:rgba(212,245,60,0.6);background:rgba(212,245,60,0.08);color:var(--accent);}
+
 .modal-actions{display:flex;gap:10px;margin-top:22px;}
 .btn-prim{flex:1;background:var(--accent);color:#07080f;border:none;border-radius:10px;padding:11px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .15s;}
 .btn-prim:hover{opacity:.88;transform:scale(.97);}
@@ -163,6 +162,13 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
 .brand h1{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;letter-spacing:-2px;line-height:1;}
 .brand h1 em{font-style:normal;}
 .brand p{margin-top:6px;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+
+/* Bouton changer niveau */
+.niveau-toggle-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);cursor:pointer;transition:all .2s;margin-top:6px;}
+.niveau-toggle-btn:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.niveau-toggle-btn.college{border-color:rgba(77,159,255,0.3);color:var(--blue);}
+.niveau-toggle-btn.lycee{border-color:rgba(212,245,60,0.3);color:var(--accent);}
+
 .total-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 22px;min-width:170px;text-align:right;position:relative;overflow:hidden;transition:border-color .4s;}
 .total-card .glow{position:absolute;inset:0;border-radius:var(--radius);transition:opacity .5s;opacity:0;pointer-events:none;}
 .total-card.pos .glow{background:radial-gradient(circle at 80% 50%,rgba(212,245,60,0.12),transparent 70%);opacity:1;}
@@ -187,13 +193,24 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
 .legend-toggle .chevron{transition:transform .25s;display:inline-block;}
 .legend.collapsed .legend-toggle .chevron{transform:rotate(-90deg);}
 .legend.collapsed .legend-body{display:none;}
-.legend-body{display:flex;flex-wrap:wrap;gap:5px 16px;align-items:center;margin-top:8px;}
-.legend-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);width:100%;}
-.leg{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.legend-body{margin-top:12px;}
+.legend-group{margin-bottom:14px;}
+.legend-group-title{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.legend-cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px 16px;}
+.leg{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;padding:2px 0;}
 .leg b{color:var(--text);}
 .pip{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;}
 .pip.g{background:var(--accent);}
 .pip.r{background:var(--red);}
+.pip.b{background:var(--blue);}
+.pip.p{background:#f472b6;}
+.pip.n{background:var(--muted);}
+.mat-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.mbadge{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid;}
+.mbadge.blue{background:rgba(77,159,255,0.1);color:var(--blue);border-color:rgba(77,159,255,0.25);}
+.mbadge.green{background:rgba(52,211,153,0.1);color:#34d399;border-color:rgba(52,211,153,0.25);}
+.mbadge.pink{background:rgba(244,114,182,0.1);color:#f472b6;border-color:rgba(244,114,182,0.25);}
+.lycee-notice{background:rgba(212,245,60,0.06);border:1px solid rgba(212,245,60,0.2);border-radius:8px;padding:7px 12px;font-size:11px;color:var(--accent);margin-top:8px;}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:border-color .2s,transform .2s;animation:fadeUp .35s ease both;}
@@ -219,15 +236,11 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
 .note-chip.neg{color:var(--red);border-color:rgba(255,77,109,0.2);}
 .note-chip button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;line-height:1;padding:0;transition:color .15s;}
 .note-chip button:hover{color:var(--red);}
-.empty-msg{font-size:11px;color:var(--muted);font-style:italic;}
-.coef-badge{padding:3px 8px;border-radius:20px;font-size:11px;}
-.coef2{background:rgba(212,245,60,0.12);color:var(--accent);border:1px solid rgba(212,245,60,0.25);}
-.coef1{background:rgba(77,159,255,0.10);color:var(--blue);border:1px solid rgba(77,159,255,0.2);}
-.coef05{background:rgba(80,81,110,0.25);color:var(--muted);border:1px solid var(--border);}
-.card-coef{font-size:10px;padding:2px 7px;border-radius:20px;margin-left:6px;}
-.card-coef.c2{background:rgba(212,245,60,0.12);color:var(--accent);}
-.card-coef.c1{background:rgba(77,159,255,0.10);color:var(--blue);}
-.card-coef.c05{background:rgba(80,81,110,0.25);color:var(--muted);}
+/* Indicateur groupe matière */
+.card-groupe{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0;}
+.card-groupe.blue{background:var(--blue);}
+.card-groupe.green{background:#34d399;}
+.card-groupe.pink{background:#f472b6;}
 
 /* ── RECAP ── */
 #recapView{animation:fadeUp .3s ease both;}
@@ -269,6 +282,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
 .gt-val.neg{color:var(--red);}
 .gt-val.zero{color:var(--muted);}
 .recap-global-total .gt-val{font-size:clamp(1.7rem,4vw,2.2rem);}
+.recap-lycee-note{font-size:10px;color:var(--accent);margin-top:6px;opacity:.7;}
 
 .footer{margin-top:30px;display:flex;gap:10px;flex-wrap:wrap;}
 .btn-reset{background:none;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;padding:8px 16px;cursor:pointer;transition:border-color .2s,color .2s;}
@@ -319,6 +333,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
   .logout-modal{max-width:100%;margin:0;border-radius:22px 22px 0 0;padding:28px 20px max(28px,env(safe-area-inset-bottom,28px));}
   .logout-modal-overlay{align-items:flex-end;}
   .scanner-link-btn{width:100%;justify-content:center;}
+  .niveau-picker{grid-template-columns:1fr 1fr;}
 }
 @media(max-width:380px){
   .profile-grid{grid-template-columns:1fr;}
@@ -341,8 +356,7 @@ header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap
     <div class="setup-body">
       <p>Pour activer la sync multi-appareils et les comptes, connecte l'app à un projet <strong>Firebase gratuit</strong>.</p>
       <br>
-      <p><strong>Étapes (5 min) :</strong></p>
-      <br>
+      <p><strong>Étapes (5 min) :</strong></p><br>
       <p>1. Va sur <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a></p>
       <p>2. <strong>Créer un projet</strong> → donne-lui un nom</p>
       <p>3. Dans <strong>Authentication</strong> → Commencer → active <strong>Email/Mot de passe</strong></p>
@@ -418,13 +432,10 @@ service cloud.firestore {
       </div>
       <div class="user-bar">
         <div class="auth-email-badge" id="userEmailBadge"></div>
-
-        <!-- ══ BOUTON SCANNER ══ -->
         <a href="scanner.html" class="scanner-link-btn">
           <span class="scan-icon">📷</span>
           Scanner un bulletin
         </a>
-
         <button class="auth-logout-btn" onclick="logout()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Déconnexion
@@ -446,6 +457,7 @@ service cloud.firestore {
         <div class="brand">
           <h1 id="appTitle">Notes <em>→</em> Argent</h1>
           <p id="appSub"></p>
+          <button class="niveau-toggle-btn" id="niveauToggleBtn" onclick="toggleNiveau()"></button>
         </div>
       </div>
       <div class="total-card" id="totalCard">
@@ -469,31 +481,69 @@ service cloud.firestore {
         <span class="chevron">▾</span>
       </button>
       <div class="legend-body">
-        <span class="leg"><span class="pip g"></span> 19–20 : <b>+2,00 €</b></span>
-        <span class="leg"><span class="pip g"></span> 17–18 : <b>+1,50 €</b></span>
-        <span class="leg"><span class="pip g"></span> 15–16 : <b>+1,00 €</b></span>
-        <span class="leg"><span class="pip g"></span> 13–14 : <b>+0,75 €</b></span>
-        <span class="leg"><span class="pip g"></span> 10–12 : <b>+0,50 €</b></span>
-        <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,25 €</b></span>
-        <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,50 €</b></span>
-        <span class="leg"><span class="pip r"></span> 4–5 : <b>−0,75 €</b></span>
-        <span class="leg"><span class="pip r"></span> 2–3 : <b>−1,00 €</b></span>
-        <span class="leg"><span class="pip r"></span> 0–1 : <b>−1,50 €</b></span>
-        <span class="leg"><span class="pip g"></span> Bonus progression : <b>+0,20 € / point gagné</b></span>
-        <div style="width:100%;height:1px;background:var(--border);margin:4px 0"></div>
-        <div class="legend-title">Coefficients par matière</div>
-        <span class="leg coef-badge coef2">📖 Français ×1,5</span>
-        <span class="leg coef-badge coef2">🧮 Maths ×1,5</span>
-        <span class="leg coef-badge coef2">🌍 Histoire-Géo ×1,5</span>
-        <span class="leg coef-badge coef1">🇬🇧 Anglais ×1</span>
-        <span class="leg coef-badge coef1">🇨🇳 Chinois ×1</span>
-        <span class="leg coef-badge coef1">🌱 SVT ×1</span>
-        <span class="leg coef-badge coef1">⚗️ Physique-Chimie ×1</span>
-        <span class="leg coef-badge coef05">💻 Technologie ×0,5</span>
-        <span class="leg coef-badge coef05">🎵 Musique ×0,5</span>
-        <span class="leg coef-badge coef05">⚽ EPS ×0,5</span>
-        <span class="leg coef-badge coef05">🎨 Arts Plastiques ×0,5</span>
-        <span class="leg coef-badge coef05">🏫 Vie Scolaire ×0,5</span>
+
+        <!-- Groupe bleu -->
+        <div class="legend-group">
+          <div class="legend-group-title">🔵 Français · Maths · Anglais</div>
+          <div class="legend-cols">
+            <span class="leg"><span class="pip g"></span> 19–20 : <b>+5,00 €</b></span>
+            <span class="leg"><span class="pip g"></span> 17–18 : <b>+3,50 €</b></span>
+            <span class="leg"><span class="pip g"></span> 15–16 : <b>+2,00 €</b></span>
+            <span class="leg"><span class="pip g"></span> 13–14 : <b>+1,00 €</b></span>
+            <span class="leg"><span class="pip g"></span> 12 : <b>+0,25 €</b></span>
+            <span class="leg"><span class="pip n"></span> 10–11 : <b>0,00 €</b></span>
+            <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,25 €</b></span>
+            <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,50 €</b></span>
+            <span class="leg"><span class="pip r"></span> 4–5 : <b>−1,00 €</b></span>
+            <span class="leg"><span class="pip r"></span> 2–3 : <b>−1,75 €</b></span>
+            <span class="leg"><span class="pip r"></span> 0–1 : <b>−2,50 €</b></span>
+          </div>
+        </div>
+
+        <!-- Groupe vert -->
+        <div class="legend-group">
+          <div class="legend-group-title">🟢 Hist-Géo · Physique-Chimie · SVT · Chinois</div>
+          <div class="legend-cols">
+            <span class="leg"><span class="pip g"></span> 19–20 : <b>+3,75 €</b></span>
+            <span class="leg"><span class="pip g"></span> 17–18 : <b>+2,63 €</b></span>
+            <span class="leg"><span class="pip g"></span> 15–16 : <b>+1,50 €</b></span>
+            <span class="leg"><span class="pip g"></span> 13–14 : <b>+0,75 €</b></span>
+            <span class="leg"><span class="pip g"></span> 12 : <b>+0,19 €</b></span>
+            <span class="leg"><span class="pip n"></span> 10–11 : <b>0,00 €</b></span>
+            <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,19 €</b></span>
+            <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,38 €</b></span>
+            <span class="leg"><span class="pip r"></span> 4–5 : <b>−0,75 €</b></span>
+            <span class="leg"><span class="pip r"></span> 2–3 : <b>−1,31 €</b></span>
+            <span class="leg"><span class="pip r"></span> 0–1 : <b>−1,88 €</b></span>
+          </div>
+        </div>
+
+        <!-- Groupe rose -->
+        <div class="legend-group">
+          <div class="legend-group-title">🩷 Musique · EPS · Arts Plastiques · Techno · Vie Scolaire</div>
+          <div class="legend-cols">
+            <span class="leg"><span class="pip g"></span> 19–20 : <b>+1,88 €</b></span>
+            <span class="leg"><span class="pip g"></span> 17–18 : <b>+1,31 €</b></span>
+            <span class="leg"><span class="pip g"></span> 15–16 : <b>+0,75 €</b></span>
+            <span class="leg"><span class="pip g"></span> 13–14 : <b>+0,38 €</b></span>
+            <span class="leg"><span class="pip g"></span> 12 : <b>+0,09 €</b></span>
+            <span class="leg"><span class="pip n"></span> 10–11 : <b>0,00 €</b></span>
+            <span class="leg"><span class="pip r"></span> 8–9 : <b>−0,09 €</b></span>
+            <span class="leg"><span class="pip r"></span> 6–7 : <b>−0,19 €</b></span>
+            <span class="leg"><span class="pip r"></span> 4–5 : <b>−0,38 €</b></span>
+            <span class="leg"><span class="pip r"></span> 2–3 : <b>−0,66 €</b></span>
+            <span class="leg"><span class="pip r"></span> 0–1 : <b>−0,94 €</b></span>
+          </div>
+        </div>
+
+        <div class="legend-group">
+          <div class="legend-group-title">✨ Bonus & Lycée</div>
+          <div class="legend-cols">
+            <span class="leg"><span class="pip g"></span> Bonus progression : <b>+0,20 € / point gagné</b> (× groupe)</span>
+            <span class="leg"><span class="pip g"></span> Lycée : <b>total × 1,10</b></span>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -513,6 +563,11 @@ service cloud.firestore {
     <label>Prénom</label>
     <input type="text" id="modalName" placeholder="Ex: Lucas" maxlength="20"
       onkeydown="if(event.key==='Enter')createProfile()">
+    <label>Niveau scolaire</label>
+    <div class="niveau-picker">
+      <button class="niveau-btn sel-college" id="niveauCollege" onclick="selectNiveau('college')">🏫 Collège</button>
+      <button class="niveau-btn" id="niveauLycee" onclick="selectNiveau('lycee')">🎓 Lycée</button>
+    </div>
     <label>Avatar</label>
     <div class="avatar-picker" id="avatarPicker"></div>
     <label>Couleur</label>
@@ -527,6 +582,9 @@ service cloud.firestore {
 <div class="toast" id="toast"></div>
 
 <script>
+/* ══════════════════════════════════════════════
+   FIREBASE CONFIG
+══════════════════════════════════════════════ */
 const firebaseConfig = {
   apiKey:            "AIzaSyByTPVLcCh95cCdG--3posbW6XdCblFOMI",
   authDomain:        "app-note-4550c.firebaseapp.com",
@@ -536,10 +594,8 @@ const firebaseConfig = {
   appId:             "1:299167926024:web:46841a484e27775ce50ebd",
   measurementId:     "G-7WVT1GG918"
 };
-
 const CONFIGURED = firebaseConfig.apiKey !== "COLLE_TA_CONFIG_ICI";
 let auth, db;
-
 if (CONFIGURED) {
   firebase.initializeApp(firebaseConfig);
   auth = firebase.auth();
@@ -550,20 +606,76 @@ if (CONFIGURED) {
   document.getElementById('setupScreen').classList.remove('hidden');
 }
 
+/* ══════════════════════════════════════════════
+   MATIÈRES — 3 groupes avec barème propre
+══════════════════════════════════════════════ */
 const MATIERES = [
-  { id:"fr",   label:"📖 Français",        coef:1.5,  rang:"principale" },
-  { id:"ma",   label:"🧮 Maths",            coef:1.5,  rang:"principale" },
-  { id:"hg",   label:"🌍 Histoire-Géo",    coef:1.5,  rang:"principale" },
-  { id:"en",   label:"🇬🇧 Anglais",         coef:1,    rang:"standard"   },
-  { id:"zh",   label:"🇨🇳 Chinois",         coef:1,    rang:"standard"   },
-  { id:"svt",  label:"🌱 SVT",              coef:1,    rang:"standard"   },
-  { id:"pc",   label:"⚗️ Physique-Chimie", coef:1,    rang:"standard"   },
-  { id:"tech", label:"💻 Technologie",      coef:0.5,  rang:"mineure"    },
-  { id:"mu",   label:"🎵 Musique",          coef:0.5,  rang:"mineure"    },
-  { id:"eps",  label:"⚽ EPS",              coef:0.5,  rang:"mineure"    },
-  { id:"ap",   label:"🎨 Arts Plastiques",  coef:0.5,  rang:"mineure"    },
-  { id:"vs",   label:"🏫 Vie Scolaire",     coef:0.5,  rang:"mineure"    },
+  { id:"fr",   label:"📖 Français",         groupe:"blue"  },
+  { id:"ma",   label:"🧮 Maths",             groupe:"blue"  },
+  { id:"en",   label:"🇬🇧 Anglais",          groupe:"blue"  },
+  { id:"hg",   label:"🌍 Histoire-Géo",      groupe:"green" },
+  { id:"pc",   label:"⚗️ Physique-Chimie",  groupe:"green" },
+  { id:"svt",  label:"🌱 SVT",               groupe:"green" },
+  { id:"zh",   label:"🇨🇳 Chinois",          groupe:"green" },
+  { id:"mu",   label:"🎵 Musique",            groupe:"pink"  },
+  { id:"eps",  label:"⚽ EPS",               groupe:"pink"  },
+  { id:"ap",   label:"🎨 Arts Plastiques",   groupe:"pink"  },
+  { id:"tech", label:"💻 Technologie",        groupe:"pink"  },
+  { id:"vs",   label:"🏫 Vie Scolaire",       groupe:"pink"  },
 ];
+
+/* Barème par groupe (valeur de base pour coef ×1 = groupe blue) */
+const BAREME = {
+  blue:  { 19:5.00, 17:3.50, 15:2.00, 13:1.00, 12:0.25, 10:0.00, 8:-0.25, 6:-0.50, 4:-1.00, 2:-1.75, 0:-2.50 },
+  green: { 19:3.75, 17:2.63, 15:1.50, 13:0.75, 12:0.19, 10:0.00, 8:-0.19, 6:-0.38, 4:-0.75, 2:-1.31, 0:-1.88 },
+  pink:  { 19:1.88, 17:1.31, 15:0.75, 13:0.38, 12:0.09, 10:0.00, 8:-0.09, 6:-0.19, 4:-0.38, 2:-0.66, 0:-0.94 },
+};
+/* Facteur bonus progression par groupe */
+const BONUS_FACTOR = { blue: 0.20, green: 0.15, pink: 0.075 };
+
+function valeurNote(n, groupe) {
+  const b = BAREME[groupe];
+  if (n >= 19) return b[19];
+  if (n >= 17) return b[17];
+  if (n >= 15) return b[15];
+  if (n >= 13) return b[13];
+  if (n >= 12) return b[12];
+  if (n >= 10) return b[10];
+  if (n >= 8)  return b[8];
+  if (n >= 6)  return b[6];
+  if (n >= 4)  return b[4];
+  if (n >= 2)  return b[2];
+  return b[0];
+}
+
+function detailMatiere(notes, groupe) {
+  const bf = BONUS_FACTOR[groupe] || 0.20;
+  return notes.map((n, i) => {
+    const gain  = valeurNote(n, groupe);
+    const bonus = (i > 0 && notes[i] > notes[i-1]) ? (notes[i] - notes[i-1]) * bf : 0;
+    return { note: n, gain, bonus };
+  });
+}
+
+function totalMatiere(notes, groupe) {
+  return detailMatiere(notes, groupe).reduce((s, d) => s + d.gain + d.bonus, 0);
+}
+
+function totalTrimestre(pd, trim) {
+  return MATIERES.reduce((acc, m) => {
+    const notes = ((pd || {})[trim] || {})[m.id] || [];
+    return acc + totalMatiere(notes, m.groupe);
+  }, 0);
+}
+
+function totalGlobal(pd, isLycee) {
+  const raw = ['t1','t2','t3'].reduce((acc, t) => acc + totalTrimestre(pd, t), 0);
+  return isLycee ? raw * 1.10 : raw;
+}
+
+/* ══════════════════════════════════════════════
+   ÉTAT
+══════════════════════════════════════════════ */
 const TRIMS       = ["t1","t2","t3"];
 const TRIM_LABELS = { t1:"1er Trimestre", t2:"2e Trimestre", t3:"3e Trimestre" };
 const AVATARS = ["🎓","⭐","🦁","🐬","🦊","🐼","🎯","🚀","🎮","🌟","🐺","🐸","🏆","😎","😭","🙏","💔","🥀"];
@@ -575,8 +687,12 @@ let currentProfile = null;
 let currentTab     = "t1";
 let selectedAvatar = AVATARS[0];
 let selectedColor  = COLORS[0];
+let selectedNiveau = 'college';
 let saveTimer      = null;
 
+/* ══════════════════════════════════════════════
+   SYNC
+══════════════════════════════════════════════ */
 function setSyncState(s) {
   const dot = document.getElementById('syncDot');
   const lbl = document.getElementById('syncLabel');
@@ -593,9 +709,7 @@ async function loadData() {
     appData = doc.exists && doc.data().appData
       ? JSON.parse(doc.data().appData)
       : { profiles: [] };
-  } catch(e) {
-    appData = { profiles: [] };
-  }
+  } catch(e) { appData = { profiles: [] }; }
 }
 
 function saveData() {
@@ -617,6 +731,9 @@ function saveData() {
   }, 700);
 }
 
+/* ══════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════ */
 let authMode = 'login';
 function switchAuthTab(mode) {
   authMode = mode;
@@ -681,6 +798,9 @@ function closeLogoutModal() { document.getElementById('logoutModal').classList.a
 async function confirmLogout() { closeLogoutModal(); await auth.signOut(); showToast('👋 À bientôt !'); }
 document.getElementById('logoutModal').addEventListener('click', function(e) { if (e.target === this) closeLogoutModal(); });
 
+/* ══════════════════════════════════════════════
+   ÉCRANS
+══════════════════════════════════════════════ */
 function showScreen(name) {
   document.getElementById('authScreen').classList.toggle('hidden', name !== 'auth');
   document.getElementById('profileScreen').style.display = name === 'profiles' ? 'block' : 'none';
@@ -706,60 +826,30 @@ if (CONFIGURED) {
   });
 }
 
-function valeurNote(n) {
-  if (n>=19) return  2.00;
-  if (n>=17) return  1.50;
-  if (n>=15) return  1.00;
-  if (n>=13) return  0.75;
-  if (n>=10) return  0.50;
-  if (n>= 8) return -0.25;
-  if (n>= 6) return -0.50;
-  if (n>= 4) return -0.75;
-  if (n>= 2) return -1.00;
-  return               -1.50;
-}
-function detailMatiere(notes, coef) {
-  coef = coef || 1;
-  return notes.map((n,i) => {
-    const gain  = valeurNote(n) * coef;
-    const bonus = (i>0 && notes[i]>notes[i-1]) ? (notes[i]-notes[i-1])*0.2*coef : 0;
-    return { note:n, gain, bonus };
-  });
-}
-function totalMatiere(notes, coef) {
-  return detailMatiere(notes,coef).reduce((s,d)=>s+d.gain+d.bonus,0);
-}
-function totalTrimestre(pd, trim) {
-  return MATIERES.reduce((acc,m)=>acc+totalMatiere(((pd||{})[trim]||{})[m.id]||[],m.coef),0);
-}
-function totalGlobal(pd) {
-  return TRIMS.reduce((acc,t)=>acc+totalTrimestre(pd,t),0);
-}
-
-function getProfileNotes() { return (appData.profiles[currentProfile]||{}).notes||{}; }
-function setProfileNotes(notes) {
-  if (appData.profiles[currentProfile]) { appData.profiles[currentProfile].notes = notes; saveData(); }
-}
-
+/* ══════════════════════════════════════════════
+   PROFILS
+══════════════════════════════════════════════ */
 function renderProfiles() {
   const grid = document.getElementById('profileGrid');
   grid.innerHTML = '';
-  appData.profiles.forEach((p,idx) => {
-    const total = totalGlobal(p.notes||{});
-    const cls   = total>0?'pos':total<0?'neg':'zero';
-    const fmt   = (total>=0?'+':'')+total.toFixed(2)+' €';
-    const cnt   = TRIMS.reduce((a,t)=>a+MATIERES.reduce((b,m)=>b+((p.notes?.[t]?.[m.id]||[]).length),0),0);
-    const card  = document.createElement('div');
+  appData.profiles.forEach((p, idx) => {
+    const isLycee = p.niveau === 'lycee';
+    const total   = totalGlobal(p.notes || {}, isLycee);
+    const cls     = total > 0 ? 'pos' : total < 0 ? 'neg' : 'zero';
+    const fmt     = (total >= 0 ? '+' : '') + total.toFixed(2) + ' €';
+    const cnt     = TRIMS.reduce((a,t) => a + MATIERES.reduce((b,m) => b + ((p.notes?.[t]?.[m.id] || []).length), 0), 0);
+    const card    = document.createElement('div');
     card.className = 'profile-card';
-    card.style.animationDelay = (idx*50)+'ms';
+    card.style.animationDelay = (idx * 50) + 'ms';
     card.innerHTML = `
       <button class="pc-del" title="Supprimer">✕</button>
       <div class="pc-avatar" style="background:${p.color}22;color:${p.color}">${p.avatar}</div>
       <div class="pc-name">${esc(p.name)}</div>
-      <div class="pc-meta">${cnt} note${cnt>1?'s':''}</div>
-      <div class="pc-total ${cls}">${cnt>0?fmt:'—'}</div>`;
-    card.querySelector('.pc-del').addEventListener('click',e=>{e.stopPropagation();deleteProfile(idx);});
-    card.addEventListener('click',()=>openProfile(idx));
+      <div class="pc-niveau ${isLycee ? 'lycee' : 'college'}">${isLycee ? '🎓 Lycée ×1,10' : '🏫 Collège'}</div>
+      <div class="pc-meta">${cnt} note${cnt > 1 ? 's' : ''}</div>
+      <div class="pc-total ${cls}">${cnt > 0 ? fmt : '—'}</div>`;
+    card.querySelector('.pc-del').addEventListener('click', e => { e.stopPropagation(); deleteProfile(idx); });
+    card.addEventListener('click', () => openProfile(idx));
     grid.appendChild(card);
   });
   const add = document.createElement('div');
@@ -775,73 +865,111 @@ function openProfile(idx) {
   document.getElementById('appTitle').innerHTML =
     `${p.avatar} <em style="color:${p.color};font-style:normal">${esc(p.name)}</em>`;
   document.getElementById('appSub').textContent = 'notes se transforment en récompenses 💸';
+  updateNiveauBtn();
   showScreen('app');
   currentTab = 't1';
   setTab('t1');
 }
 
-function goProfiles() { showScreen('profiles'); currentProfile=null; renderProfiles(); }
+function getCurrentProfile() { return appData.profiles[currentProfile] || {}; }
+
+function updateNiveauBtn() {
+  const p   = getCurrentProfile();
+  const btn = document.getElementById('niveauToggleBtn');
+  if (!btn) return;
+  const isLycee = p.niveau === 'lycee';
+  btn.className = 'niveau-toggle-btn ' + (isLycee ? 'lycee' : 'college');
+  btn.textContent = isLycee ? '🎓 Lycée (×1,10) — changer' : '🏫 Collège — changer';
+}
+
+function toggleNiveau() {
+  const p = getCurrentProfile();
+  p.niveau = p.niveau === 'lycee' ? 'college' : 'lycee';
+  saveData();
+  updateNiveauBtn();
+  afficher();
+  showToast(p.niveau === 'lycee' ? '🎓 Passé en Lycée (×1,10)' : '🏫 Passé en Collège');
+}
+
+function goProfiles() { showScreen('profiles'); currentProfile = null; renderProfiles(); }
 
 function deleteProfile(idx) {
   if (!confirm('Supprimer ce profil et toutes ses notes ?')) return;
-  appData.profiles.splice(idx,1); saveData();
+  appData.profiles.splice(idx, 1); saveData();
   showToast('🗑 Profil supprimé'); renderProfiles();
 }
 
 function resetAllProfiles() {
   if (!confirm('Vraiment tout effacer ?')) return;
-  appData = { profiles:[] }; saveData();
+  appData = { profiles: [] }; saveData();
   showToast('🔄 Réinitialisé'); renderProfiles();
+}
+
+/* ══════════════════════════════════════════════
+   MODAL PROFIL
+══════════════════════════════════════════════ */
+function selectNiveau(n) {
+  selectedNiveau = n;
+  document.getElementById('niveauCollege').className = 'niveau-btn' + (n === 'college' ? ' sel-college' : '');
+  document.getElementById('niveauLycee').className   = 'niveau-btn' + (n === 'lycee'   ? ' sel-lycee'   : '');
 }
 
 function buildModal() {
   const ap = document.getElementById('avatarPicker');
   ap.innerHTML = '';
-  AVATARS.forEach(av=>{
-    const b=document.createElement('button');
-    b.className='av-btn'+(av===selectedAvatar?' sel':'');
-    b.textContent=av;
-    b.onclick=()=>{selectedAvatar=av;buildModal();};
+  AVATARS.forEach(av => {
+    const b = document.createElement('button');
+    b.className = 'av-btn' + (av === selectedAvatar ? ' sel' : '');
+    b.textContent = av;
+    b.onclick = () => { selectedAvatar = av; buildModal(); };
     ap.appendChild(b);
   });
   const cp = document.getElementById('colorPicker');
-  cp.innerHTML='';
-  COLORS.forEach(c=>{
-    const b=document.createElement('button');
-    b.className='col-btn'+(c===selectedColor?' sel':'');
-    b.style.background=c;
-    b.onclick=()=>{selectedColor=c;buildModal();};
+  cp.innerHTML = '';
+  COLORS.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'col-btn' + (c === selectedColor ? ' sel' : '');
+    b.style.background = c;
+    b.onclick = () => { selectedColor = c; buildModal(); };
     cp.appendChild(b);
   });
 }
 
 function openModal() {
-  selectedAvatar=AVATARS[Math.floor(Math.random()*AVATARS.length)];
-  selectedColor=COLORS[Math.floor(Math.random()*COLORS.length)];
-  document.getElementById('modalName').value='';
+  selectedAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+  selectedColor  = COLORS[Math.floor(Math.random() * COLORS.length)];
+  selectedNiveau = 'college';
+  selectNiveau('college');
+  document.getElementById('modalName').value = '';
   buildModal();
   document.getElementById('modalOverlay').classList.remove('hidden');
-  setTimeout(()=>document.getElementById('modalName').focus(),100);
+  setTimeout(() => document.getElementById('modalName').focus(), 100);
 }
 
 function closeModal() { document.getElementById('modalOverlay').classList.add('hidden'); }
-function closeModalOutside(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
 function createProfile() {
   const name = document.getElementById('modalName').value.trim();
   if (!name) { showToast('❌ Saisis un prénom !'); return; }
-  appData.profiles.push({name,avatar:selectedAvatar,color:selectedColor,notes:{}});
+  appData.profiles.push({ name, avatar: selectedAvatar, color: selectedColor, niveau: selectedNiveau, notes: {} });
   saveData(); closeModal();
   showToast('✅ Profil créé !'); renderProfiles();
 }
 
+/* ══════════════════════════════════════════════
+   ONGLETS
+══════════════════════════════════════════════ */
 function setTab(tab) {
   currentTab = tab;
-  [...TRIMS,'recap'].forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));
+  [...TRIMS, 'recap'].forEach(t => document.getElementById('tab-'+t).classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   afficher();
 }
 
+/* ══════════════════════════════════════════════
+   GRILLE NOTES
+══════════════════════════════════════════════ */
 function afficherGrille() {
   const notesData = getProfileNotes();
   document.getElementById('legendeEl').classList.remove('hidden');
@@ -851,26 +979,24 @@ function afficherGrille() {
   grid.innerHTML = '';
   const trimData = notesData[currentTab] || {};
 
-  MATIERES.forEach((m,idx)=>{
-    const notes   = trimData[m.id] || [];
-    const sub     = totalMatiere(notes,m.coef);
-    const subFmt  = (sub>=0?'+':'')+sub.toFixed(2)+' €';
-    const subCls  = sub>0?'pos':sub<0?'neg':'zero';
-    const coefCls = m.coef===1.5?'c2':m.coef===0.5?'c05':'c1';
-    const coefLbl = m.coef===1.5?'×1,5':m.coef===0.5?'×0,5':'×1';
+  MATIERES.forEach((m, idx) => {
+    const notes  = trimData[m.id] || [];
+    const sub    = totalMatiere(notes, m.groupe);
+    const subFmt = (sub >= 0 ? '+' : '') + sub.toFixed(2) + ' €';
+    const subCls = sub > 0 ? 'pos' : sub < 0 ? 'neg' : 'zero';
 
-    const chips = notes.length===0
+    const chips = notes.length === 0
       ? '<span class="empty-msg">Aucune note</span>'
-      : notes.map((n,i)=>`<span class="note-chip ${n>=10?'pos':'neg'}">${n}/20
+      : notes.map((n, i) => `<span class="note-chip ${n >= 10 ? 'pos' : 'neg'}">${n}/20
           <button class="del-note" data-mid="${m.id}" data-i="${i}">×</button></span>`).join('');
 
     const card = document.createElement('div');
-    card.className='card';
-    card.style.animationDelay=(idx*40)+'ms';
-    card.innerHTML=`
+    card.className = 'card';
+    card.style.animationDelay = (idx * 40) + 'ms';
+    card.innerHTML = `
       <div class="card-head">
-        <span class="card-name">${m.label}<span class="card-coef ${coefCls}">${coefLbl}</span></span>
-        <span class="card-sub ${subCls}">${notes.length>0?subFmt:'—'}</span>
+        <span class="card-name"><span class="card-groupe ${m.groupe}"></span>${m.label}</span>
+        <span class="card-sub ${subCls}">${notes.length > 0 ? subFmt : '—'}</span>
       </div>
       <div class="row">
         <input id="inp_${m.id}" type="number" min="0" max="20" step="0.5" placeholder="Note /20">
@@ -878,10 +1004,10 @@ function afficherGrille() {
       </div>
       <div class="notes-list">${chips}</div>`;
 
-    card.querySelector('.btn-add').addEventListener('click',()=>ajouterNote(m.id));
-    card.querySelector(`#inp_${m.id}`).addEventListener('keydown',e=>{if(e.key==='Enter')ajouterNote(m.id);});
-    card.querySelectorAll('.del-note').forEach(btn=>{
-      btn.addEventListener('click',()=>supprimerNote(btn.dataset.mid,parseInt(btn.dataset.i)));
+    card.querySelector('.btn-add').addEventListener('click', () => ajouterNote(m.id));
+    card.querySelector(`#inp_${m.id}`).addEventListener('keydown', e => { if (e.key === 'Enter') ajouterNote(m.id); });
+    card.querySelectorAll('.del-note').forEach(btn => {
+      btn.addEventListener('click', () => supprimerNote(btn.dataset.mid, parseInt(btn.dataset.i)));
     });
     grid.appendChild(card);
   });
@@ -891,24 +1017,24 @@ function afficherGrille() {
 function ajouterNote(mId) {
   const inp = document.getElementById('inp_'+mId);
   const raw = parseFloat(inp.value);
-  if (isNaN(raw)||raw<0||raw>20) {
-    inp.classList.add('err'); setTimeout(()=>inp.classList.remove('err'),400);
+  if (isNaN(raw) || raw < 0 || raw > 20) {
+    inp.classList.add('err'); setTimeout(() => inp.classList.remove('err'), 400);
     showToast('❌ Note invalide (0–20)'); return;
   }
-  const note = Math.round(raw*10)/10;
+  const note  = Math.round(raw * 10) / 10;
   const notes = getProfileNotes();
-  if (!notes[currentTab]) notes[currentTab]={};
-  if (!notes[currentTab][mId]) notes[currentTab][mId]=[];
+  if (!notes[currentTab]) notes[currentTab] = {};
+  if (!notes[currentTab][mId]) notes[currentTab][mId] = [];
   notes[currentTab][mId].push(note);
   setProfileNotes(notes);
-  inp.value=''; inp.focus();
+  inp.value = ''; inp.focus();
   afficher(); showToast('✅ Note ajoutée !');
 }
 
-function supprimerNote(mId,idx) {
+function supprimerNote(mId, idx) {
   const notes = getProfileNotes();
-  if (!notes[currentTab]||!notes[currentTab][mId]) return;
-  notes[currentTab][mId].splice(idx,1);
+  if (!notes[currentTab] || !notes[currentTab][mId]) return;
+  notes[currentTab][mId].splice(idx, 1);
   setProfileNotes(notes); afficher(); showToast('🗑 Note supprimée');
 }
 
@@ -917,8 +1043,12 @@ function resetCurrentProfile() {
   setProfileNotes({}); afficher(); showToast('🔄 Notes réinitialisées');
 }
 
+/* ══════════════════════════════════════════════
+   RÉCAP
+══════════════════════════════════════════════ */
 function afficherRecap() {
-  const nd = getProfileNotes();
+  const nd      = getProfileNotes();
+  const isLycee = getCurrentProfile().niveau === 'lycee';
   document.getElementById('legendeEl').classList.add('hidden');
   document.getElementById('grid').classList.add('hidden');
   const rv = document.getElementById('recapView');
@@ -926,64 +1056,71 @@ function afficherRecap() {
 
   let html = '<div class="recap-header">📊 Récapitulatif annuel</div>';
 
-  TRIMS.forEach(trim=>{
-    const td = nd[trim]||{};
-    const tt = totalTrimestre(nd,trim);
-    const tc = tt>0?'pos':tt<0?'neg':'zero';
-    html+=`<div class="recap-trim">
+  TRIMS.forEach(trim => {
+    const td = nd[trim] || {};
+    const tt = totalTrimestre(nd, trim);
+    const tc = tt > 0 ? 'pos' : tt < 0 ? 'neg' : 'zero';
+    html += `<div class="recap-trim">
       <div class="recap-trim-title">${TRIM_LABELS[trim]}
-        <span class="recap-trim-badge ${tc}">${tt>=0?'+':''}${tt.toFixed(2)} €</span>
+        <span class="recap-trim-badge ${tc}">${tt >= 0 ? '+' : ''}${tt.toFixed(2)} €</span>
       </div><div class="recap-table">`;
 
-    MATIERES.forEach(m=>{
-      const notes   = td[m.id]||[];
-      const details = detailMatiere(notes,m.coef);
-      const total   = details.reduce((s,d)=>s+d.gain+d.bonus,0);
-      const tc2     = total>0?'pos':total<0?'neg':'zero';
+    MATIERES.forEach(m => {
+      const notes   = td[m.id] || [];
+      const details = detailMatiere(notes, m.groupe);
+      const total   = details.reduce((s, d) => s + d.gain + d.bonus, 0);
+      const tc2     = total > 0 ? 'pos' : total < 0 ? 'neg' : 'zero';
       const did     = `det_${trim}_${m.id}`;
 
-      if (notes.length===0) {
-        html+=`<div class="recap-row"><span class="recap-row-name">${m.label}</span>
+      if (notes.length === 0) {
+        html += `<div class="recap-row"><span class="recap-row-name"><span class="card-groupe ${m.groupe}" style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px"></span>${m.label}</span>
           <span class="recap-row-empty">Aucune note</span></div>`;
       } else {
-        const chips = notes.map(n=>`<span class="recap-chip ${n>=10?'pos':'neg'}">${n}/20</span>`).join('');
-        html+=`<div class="recap-row" onclick="toggleDetail('${did}')">
-          <span class="recap-row-name">${m.label}</span>
+        const chips = notes.map(n => `<span class="recap-chip ${n >= 10 ? 'pos' : 'neg'}">${n}/20</span>`).join('');
+        html += `<div class="recap-row" onclick="toggleDetail('${did}')">
+          <span class="recap-row-name"><span class="card-groupe ${m.groupe}" style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px"></span>${m.label}</span>
           <span class="recap-row-notes">${chips}</span>
-          <span class="recap-row-total ${tc2}">${total>=0?'+':''}${total.toFixed(2)} €</span>
+          <span class="recap-row-total ${tc2}">${total >= 0 ? '+' : ''}${total.toFixed(2)} €</span>
         </div>
         <div class="recap-detail-rows hidden" id="${did}">`;
-        details.forEach((d,i)=>{
-          const rt = d.gain+d.bonus;
-          const rc = rt>0?'pos':rt<0?'neg':'zero';
-          const bd = d.bonus>0?`<span style="font-size:10px;color:rgba(212,245,60,.6)">+bonus ${d.bonus.toFixed(2)}€</span>`:'<span></span>';
-          html+=`<div class="recap-detail-row">
+        details.forEach((d, i) => {
+          const rt = d.gain + d.bonus;
+          const rc = rt > 0 ? 'pos' : rt < 0 ? 'neg' : 'zero';
+          const bd = d.bonus > 0
+            ? `<span style="font-size:10px;color:rgba(212,245,60,.6)">+bonus ${d.bonus.toFixed(2)}€</span>`
+            : '<span></span>';
+          html += `<div class="recap-detail-row">
             <span class="d-note">Note ${i+1} : ${d.note}/20</span>
             ${bd}
-            <span class="d-gain ${rc}">${rt>=0?'+':''}${rt.toFixed(2)} €</span>
+            <span class="d-gain ${rc}">${rt >= 0 ? '+' : ''}${rt.toFixed(2)} €</span>
           </div>`;
         });
-        html+=`</div>`;
+        html += `</div>`;
       }
     });
-    html+=`</div></div>`;
+    html += `</div></div>`;
   });
 
-  const t1=totalTrimestre(nd,'t1'), t2=totalTrimestre(nd,'t2'), t3=totalTrimestre(nd,'t3');
-  const tot = t1+t2+t3;
-  const tc  = tot>0?'pos':tot<0?'neg':'zero';
-  const fmtT = v=>{const c=v>0?'pos':v<0?'neg':'zero';return `<div class="gt-val ${c}">${v>=0?'+':''}${v.toFixed(2)} €</div>`;};
+  const rawT1 = totalTrimestre(nd, 't1');
+  const rawT2 = totalTrimestre(nd, 't2');
+  const rawT3 = totalTrimestre(nd, 't3');
+  const rawTot = rawT1 + rawT2 + rawT3;
+  const finalTot = isLycee ? rawTot * 1.10 : rawTot;
+  const tc  = finalTot > 0 ? 'pos' : finalTot < 0 ? 'neg' : 'zero';
+  const fmtT = v => { const c = v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero'; return `<div class="gt-val ${c}">${v >= 0 ? '+' : ''}${v.toFixed(2)} €</div>`; };
 
-  html+=`<div class="recap-global">
-    <div><div class="recap-global-label">Bilan annuel</div></div>
+  html += `<div class="recap-global">
+    <div><div class="recap-global-label">Bilan annuel</div>
+    ${isLycee ? '<div class="recap-lycee-note">🎓 Lycée : total brut ×1,10 appliqué</div>' : ''}
+    </div>
     <div class="recap-global-trims">
-      <div class="recap-global-trim"><div class="gt-label">T1</div>${fmtT(t1)}</div>
-      <div class="recap-global-trim"><div class="gt-label">T2</div>${fmtT(t2)}</div>
-      <div class="recap-global-trim"><div class="gt-label">T3</div>${fmtT(t3)}</div>
+      <div class="recap-global-trim"><div class="gt-label">T1</div>${fmtT(rawT1)}</div>
+      <div class="recap-global-trim"><div class="gt-label">T2</div>${fmtT(rawT2)}</div>
+      <div class="recap-global-trim"><div class="gt-label">T3</div>${fmtT(rawT3)}</div>
     </div>
     <div class="recap-global-total">
-      <div class="gt-label">Total annuel</div>
-      <div class="gt-val ${tc}">${tot>=0?'+':''}${tot.toFixed(2)} €</div>
+      <div class="gt-label">Total annuel${isLycee ? ' (×1,10)' : ''}</div>
+      <div class="gt-val ${tc}">${finalTot >= 0 ? '+' : ''}${finalTot.toFixed(2)} €</div>
     </div>
   </div>`;
 
@@ -991,31 +1128,40 @@ function afficherRecap() {
   updateTotalCard(nd);
 }
 
-function toggleDetail(id) { const el=document.getElementById(id); if(el)el.classList.toggle('hidden'); }
+function toggleDetail(id) { const el = document.getElementById(id); if (el) el.classList.toggle('hidden'); }
 
 function updateTotalCard(nd) {
-  const total = totalGlobal(nd);
-  const valEl = document.getElementById('totalVal');
-  const subEl = document.getElementById('totalSub');
-  const crd   = document.getElementById('totalCard');
-  const cls   = total>0?'pos':total<0?'neg':'zero';
-  valEl.textContent = (total>=0?'+':'')+total.toFixed(2).replace('.',',')+' €';
-  valEl.className   = 'total-val '+cls;
-  crd.className     = 'total-card '+(total>0?'pos':total<0?'neg':'');
-  const parts = TRIMS.map(t=>{const v=totalTrimestre(nd,t);return v!==0?`${t.toUpperCase()} ${v>=0?'+':''}${v.toFixed(2)}€`:null;}).filter(Boolean);
-  subEl.textContent = parts.join(' · ');
+  const p      = getCurrentProfile();
+  const isLycee = p.niveau === 'lycee';
+  const total  = totalGlobal(nd, isLycee);
+  const valEl  = document.getElementById('totalVal');
+  const subEl  = document.getElementById('totalSub');
+  const crd    = document.getElementById('totalCard');
+  const cls    = total > 0 ? 'pos' : total < 0 ? 'neg' : 'zero';
+  valEl.textContent = (total >= 0 ? '+' : '') + total.toFixed(2).replace('.', ',') + ' €';
+  valEl.className   = 'total-val ' + cls;
+  crd.className     = 'total-card ' + (total > 0 ? 'pos' : total < 0 ? 'neg' : '');
+  const parts = TRIMS.map(t => { const v = totalTrimestre(nd, t); return v !== 0 ? `${t.toUpperCase()} ${v >= 0 ? '+' : ''}${v.toFixed(2)}€` : null; }).filter(Boolean);
+  subEl.textContent = parts.join(' · ') + (isLycee ? ' · ×1,10' : '');
 }
 
-function afficher() { if(currentTab==='recap') afficherRecap(); else afficherGrille(); }
+/* ══════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════ */
+function afficher() { if (currentTab === 'recap') afficherRecap(); else afficherGrille(); }
 function toggleLegend() { document.getElementById('legendeEl').classList.toggle('collapsed'); }
+function getProfileNotes() { return (appData.profiles[currentProfile] || {}).notes || {}; }
+function setProfileNotes(notes) {
+  if (appData.profiles[currentProfile]) { appData.profiles[currentProfile].notes = notes; saveData(); }
+}
 function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 let toastTimer;
 function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 </script>
 </body>
